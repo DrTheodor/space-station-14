@@ -78,6 +78,8 @@
   - type: TraitorRule
   - type: ThiefRule #the thieves come as an extension of another gamemode
     ruleChance: 0.5
+  - type: ChangelingRule #the thieves come as an extension of another gamemode
+    ruleChance: 1
 
 - type: entity
   id: Revolutionary

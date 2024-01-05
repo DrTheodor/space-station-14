@@ -434,7 +434,33 @@ namespace Content.Shared.CCVar
 
         public static readonly CVarDef<float> TraitorStartDelayVariance =
             CVarDef.Create("traitor.start_delay_variance", 3f * 60f);
+        /*
+         * Changeling
+         */
 
+        public static readonly CVarDef<int> ChangelingMinPlayers =
+            CVarDef.Create("changeling.min_players", 5);
+
+        public static readonly CVarDef<int> ChangelingMaxChangelings =
+            CVarDef.Create("changeling.max_changelings", 12); // Assuming average server maxes somewhere from like 50-80 people
+
+        public static readonly CVarDef<int> ChangelingPlayersPerChangeling =
+            CVarDef.Create("changeling.players_per_changeling", 10);
+
+        public static readonly CVarDef<int> ChangelingStartingBalance =
+            CVarDef.Create("changeling.starting_balance", 10);
+
+        public static readonly CVarDef<int> ChangelingMaxDifficulty =
+            CVarDef.Create("changeling.max_difficulty", 5);
+
+        public static readonly CVarDef<int> ChangelingMaxPicks =
+            CVarDef.Create("changeling.max_picks", 20);
+
+        public static readonly CVarDef<float> ChangelingStartDelay =
+            CVarDef.Create("changeling.start_delay", 4f * 60f);
+
+        public static readonly CVarDef<float> ChangelingStartDelayVariance =
+            CVarDef.Create("changeling.start_delay_variance", 3f * 60f);
         /*
          * TraitorDeathMatch
          */

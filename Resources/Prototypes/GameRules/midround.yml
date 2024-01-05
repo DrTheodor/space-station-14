@@ -34,7 +34,14 @@
   parent: BaseGameRule
   noSpawn: true
   components:
-  - type: ThiefRule 
+  - type: ThiefRule
+
+- type: entity
+  id: Changeling
+  parent: BaseGameRule
+  noSpawn: true
+  components:
+    - type: ChangelingRule
 
 - type: entity
   noSpawn: true
