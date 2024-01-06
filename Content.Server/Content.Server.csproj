@@ -26,7 +26,7 @@
     <ProjectReference Include="..\Content.Shared\Content.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Changeling\" />
+    <Folder Include="Changeling\Components\" />
     <Folder Include="Objectives\Interfaces\" />
     <Folder Include="Tools\Systems\" />
   </ItemGroup>

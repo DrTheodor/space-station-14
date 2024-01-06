@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": null,
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "Ling_evolve"
+    },
+    {
+      "name": "Ling_stasis"
+    },
+    {
+      "name": "Ling_regenerate"
+    },
+    {
+      "name": "Ling_transform"
+    },
+    {
+      "name": "Ling_absorb"
+    }
+  ]
+}

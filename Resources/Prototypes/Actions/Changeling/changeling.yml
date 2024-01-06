@@ -1,0 +1,49 @@
+﻿- type: entity
+  id: ActionChangelingEvolve
+  name: action-changeling-evolve-name
+  description: action-changeling-evolve-desc
+  noSpawn: true
+  components:
+    - type: InstantAction
+      icon: Interface/Actions/LingActions/Ling_evolve.png
+      event: !type:ChangelingEvolveActionEvent
+
+- type: entity
+  id: ActionChangelingStasis
+  name: action-changeling-stasis-name
+  description: action-changeling-stasis-desc
+  noSpawn: true
+  components:
+    - type: InstantAction
+      icon: Interface/Actions/LingActions/Ling_stasis.png
+      event: !type:ChangelingStasisActionEvent
+
+- type: entity
+  id: ActionChangelingRegenerate
+  name: action-changeling-regenerate-name
+  description: action-changeling-regenerate-desc
+  noSpawn: true
+  components:
+    - type: InstantAction
+      icon: Interface/Actions/LingActions/Ling_regenerate.png
+      event: !type:ChangelingRegenerateActionEvent
+
+- type: entity
+  id: ActionChangelingTransform
+  name: action-changeling-Transform-name
+  description: action-changeling-transform-desc
+  noSpawn: true
+  components:
+    - type: InstantAction
+      icon: Interface/Actions/LingActions/Ling_transform.png
+      event: !type:ChangelingTransformActionEvent
+
+- type: entity
+  id: ActionChangelingAbsorb
+  name: action-changeling-absorb-name
+  description: action-changeling-absorb-desc
+  noSpawn: true
+  components:
+    - type: InstantAction
+      icon: Interface/Actions/LingActions/Ling_absorb.png
+      event: !type:ChangelingAbsorbActionEvent

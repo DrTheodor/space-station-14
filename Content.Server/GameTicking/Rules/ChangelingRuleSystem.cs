@@ -13,6 +13,7 @@ using Robust.Shared.Prototypes;
 using System.Linq;
 using Content.Shared.Humanoid;
 using Content.Server.Antag;
+using Content.Shared.Changeling.Components;
 using Robust.Server.Audio;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Random;
@@ -110,7 +111,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         {
             PrototypeId = changelingRule.ChangelingPrototypeId
         });
-
+        AddComp<ChangelingComponent>((EntityUid) mind.OwnedEntity);
         // Notificate player about new role assignment
         if (_mindSystem.TryGetSession(mindId, out var session))
         {
@@ -156,7 +157,6 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
     {
         if (!TryComp<MindComponent>(changeling.Owner, out var mind) || mind.OwnedEntity == null)
             return;
-
         args.Append(Loc.GetString("changeling-role-greeting"));
     }
 
