@@ -1,5 +1,6 @@
 ﻿using Content.Shared.Actions;
 using Content.Shared.Changeling.Components;
+using Content.Shared.Store;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Changeling;
@@ -20,8 +21,16 @@ public sealed class SharedChangelingSystem : EntitySystem
     private void OnInit(EntityUid uid, ChangelingComponent component, MapInitEvent args)
     {
         _action.AddAction(uid, ref component.Action, ChangelingEvolveId);
+
+
     }
+
+
 }
 public sealed partial class ChangelingEvolveActionEvent : InstantActionEvent
+{
+}
+
+public sealed partial class ChangelingStingExtractActionEvent : InstantActionEvent
 {
 }

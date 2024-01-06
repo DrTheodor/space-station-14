@@ -1,4 +1,6 @@
-﻿namespace Content.Shared.Changeling.Components;
+﻿using Content.Shared.FixedPoint;
+
+namespace Content.Shared.Changeling.Components;
 
 /// <summary>
 /// This is used for...

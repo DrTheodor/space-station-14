@@ -1,0 +1,13 @@
+﻿- type: entity
+  parent: MobHuman
+  components:
+    - type: UserInterface
+      interfaces:
+        - key: enum.StoreUiKey.Key
+          type: StoreBoundUserInterface
+    - type: Store
+      categories:
+        - ChangelingAbilities
+      currencyWhitelist:
+        - EvolutionPoints
+      balance: 10
