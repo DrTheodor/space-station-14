@@ -15,12 +15,3 @@
   - UplinkPointless
   currencyWhitelist:
   - Telecrystal
-
-- type: storePreset
-  id: StorePresetChangeling
-  storeName: Evolution
-  categories:
-    - ChangelingAbilities
-  currencyWhitelist:
-    - EvolutionPoints
-  balance: 10
