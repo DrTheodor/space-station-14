@@ -68,3 +68,8 @@
   id: RevenantAbilities
   name: store-category-abilities
 
+#changeling
+- type: storeCategory
+  id: ChangelingAbilities
+  name: store-category-changeling-abilities
+

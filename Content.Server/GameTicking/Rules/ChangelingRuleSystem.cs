@@ -13,6 +13,8 @@ using Robust.Shared.Prototypes;
 using System.Linq;
 using Content.Shared.Humanoid;
 using Content.Server.Antag;
+using Content.Server.Store.Components;
+using Content.Server.Store.Systems;
 using Content.Shared.Changeling.Components;
 using Robust.Server.Audio;
 using Content.Shared.CombatMode.Pacification;
@@ -29,6 +31,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
     [Dependency] private readonly MindSystem _mindSystem = default!;
     [Dependency] private readonly SharedRoleSystem _roleSystem = default!;
     [Dependency] private readonly ObjectivesSystem _objectives = default!;
+    [Dependency] private readonly StoreSystem _store = default!;
 
     [ValidatePrototypeId<WeightedRandomPrototype>]
     const string SmallObjectiveGroup = "TraitorObjectiveGroups";
@@ -112,6 +115,11 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
             PrototypeId = changelingRule.ChangelingPrototypeId
         });
         AddComp<ChangelingComponent>((EntityUid) mind.OwnedEntity);
+
+        var store = EnsureComp<StoreComponent>((EntityUid) mind.OwnedEntity);
+        _store.InitializeFromPreset("StorePresetEvolution", (EntityUid) mind.OwnedEntity, store);
+        store.AccountOwner = (EntityUid) mind.OwnedEntity;
+
         // Notificate player about new role assignment
         if (_mindSystem.TryGetSession(mindId, out var session))
         {

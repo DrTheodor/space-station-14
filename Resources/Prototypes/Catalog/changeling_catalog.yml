@@ -1,0 +1,12 @@
+﻿- type: listing
+  id: ChangelingStingExtract
+  name: action-changeling-sting-extract-name
+  description: action-changeling-sting-extract-desc
+  productAction: ActionChangelingStingExtract
+  cost:
+    EvolutionPoints: 0
+  categories:
+    - ChangelingAbilities
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 1

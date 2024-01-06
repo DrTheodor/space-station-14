@@ -25,3 +25,7 @@ public sealed class SharedChangelingSystem : EntitySystem
 public sealed partial class ChangelingEvolveActionEvent : InstantActionEvent
 {
 }
+
+public sealed partial class ChangelingStingExtractActionEvent : InstantActionEvent
+{
+}
