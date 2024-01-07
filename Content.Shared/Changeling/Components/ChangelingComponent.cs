@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Content.Shared.Actions;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
 
@@ -31,7 +32,23 @@ public sealed partial class ChangelingComponent : Component
     [ViewVariables]
     public float Accumulator = 0;
 
-    [DataField] public EntityUid? Action;
+    [DataField("actionEvolveEntity")]
+    public EntityUid? ActionEvolveEntity;
+
+    [DataField("actionTransformEntity")]
+    public EntityUid? ActionTransformEntity;
+}
+
+public sealed partial class ChangelingEvolveActionEvent : InstantActionEvent
+{
+}
+
+public sealed partial class ChangelingStingExtractActionEvent : EntityTargetActionEvent
+{
+}
+
+public sealed partial class ChangelingTransformActionEvent : InstantActionEvent
+{
 }
 
 

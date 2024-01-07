@@ -24,15 +24,21 @@ public sealed class SharedChangelingSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<ChangelingComponent, MapInitEvent>(OnInit);
+        SubscribeLocalEvent<ChangelingComponent, ComponentStartup>(OnStartup);
 
         SubscribeLocalEvent<ChangelingComponent, ChangelingTransformActionEvent>(OnTransform);
     }
-    private void OnInit(EntityUid uid, ChangelingComponent component, MapInitEvent args)
+
+    private void OnStartup(EntityUid uid, ChangelingComponent component, ComponentStartup args)
     {
-        _action.AddAction(uid, ref component.Action, ChangelingEvolveId);
-        _action.AddAction(uid, ref component.Action, ChangelingTransformId);
+        if (!TryComp(uid, out ActionsComponent? comp))
+            return;
+
+        _action.AddAction(uid, ref component.ActionEvolveEntity, ChangelingEvolveId, component: comp);
+        _action.AddAction(uid, ref component.ActionTransformEntity, ChangelingTransformId, component: comp);
     }
+
+
 
     private void OnTransform(EntityUid uid, ChangelingComponent component, ChangelingTransformActionEvent args)
     {
@@ -41,20 +47,10 @@ public sealed class SharedChangelingSystem : EntitySystem
             RemComp<HumanoidAppearanceComponent>(uid);
             AddComp(uid, component.DnaBank.ElementAt(-1).Value);
         }
-        else if (component.Chemicals < 25)
+        else if (component.Chemicals < 5)
         {
             _popup.PopupEntity(Loc.GetString("changeling-not-enough-chemicals-popup"), uid, uid);
         }
     }
 }
-public sealed partial class ChangelingEvolveActionEvent : InstantActionEvent
-{
-}
 
-public sealed partial class ChangelingStingExtractActionEvent : EntityTargetActionEvent
-{
-}
-
-public sealed partial class ChangelingTransformActionEvent : InstantActionEvent
-{
-}

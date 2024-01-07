@@ -15,6 +15,7 @@ using Content.Shared.Humanoid;
 using Content.Server.Antag;
 using Content.Server.Store.Components;
 using Content.Server.Store.Systems;
+using Content.Shared.Actions;
 using Content.Shared.Changeling.Components;
 using Robust.Server.Audio;
 using Content.Shared.CombatMode.Pacification;
@@ -116,6 +117,7 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
             PrototypeId = changelingRule.ChangelingPrototypeId
         });
         AddComp<ChangelingComponent>((EntityUid) mind.OwnedEntity);
+        EnsureComp<ActionsComponent>(mind.OwnedEntity.Value);
 
         var store = EnsureComp<StoreComponent>((EntityUid) mind.OwnedEntity);
         _store.InitializeFromPreset("StorePresetEvolution", (EntityUid) mind.OwnedEntity, store);

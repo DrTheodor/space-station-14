@@ -1,4 +1,5 @@
-﻿using Content.Server.Store.Components;
+﻿using System.Linq;
+using Content.Server.Store.Components;
 using Content.Server.Store.Systems;
 using Content.Shared.Alert;
 using Content.Shared.Changeling;
@@ -37,8 +38,10 @@ public sealed class ChangelingSystem : EntitySystem
         _store.ToggleUi(uid, uid, store);
     }
 
+
     private void OnStingExtract(EntityUid uid, ChangelingComponent component, ChangelingStingExtractActionEvent args)
     {
+
         if (HasComp<HumanoidAppearanceComponent>(args.Target) && component.Chemicals >= 25)
         {
             _popup.PopupEntity(Loc.GetString("changeling-sting-extract-popup") + Name(args.Target), uid, uid);
