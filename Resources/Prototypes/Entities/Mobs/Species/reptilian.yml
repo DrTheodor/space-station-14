@@ -58,6 +58,10 @@
     heatDamage:
       types:
         Heat : 0.1 #per second, scales with temperature & other constants
+  - type: UserInterface
+    interfaces:
+      - key: enum.StoreUiKey.Key
+        type: StoreBoundUserInterface
 
 - type: entity
   parent: BaseSpeciesDummy

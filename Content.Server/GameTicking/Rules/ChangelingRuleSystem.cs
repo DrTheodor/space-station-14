@@ -18,6 +18,7 @@ using Content.Server.Store.Systems;
 using Content.Shared.Changeling.Components;
 using Robust.Server.Audio;
 using Content.Shared.CombatMode.Pacification;
+using Content.Shared.FixedPoint;
 using Content.Shared.Random;
 
 namespace Content.Server.GameTicking.Rules;
@@ -119,6 +120,10 @@ public sealed class ChangelingRuleSystem : GameRuleSystem<ChangelingRuleComponen
         var store = EnsureComp<StoreComponent>((EntityUid) mind.OwnedEntity);
         _store.InitializeFromPreset("StorePresetEvolution", (EntityUid) mind.OwnedEntity, store);
         store.AccountOwner = (EntityUid) mind.OwnedEntity;
+
+        store.Balance.Clear();
+        _store.TryAddCurrency(new Dictionary<string, FixedPoint2> { { "EvolutionPoints", 10 } }, mind.OwnedEntity.Value, store);
+
 
         // Notificate player about new role assignment
         if (_mindSystem.TryGetSession(mindId, out var session))

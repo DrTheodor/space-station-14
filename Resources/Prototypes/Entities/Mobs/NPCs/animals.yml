@@ -1082,6 +1082,8 @@
     interfaces:
     - key: enum.StrippingUiKey.Key
       type: StrippableBoundUserInterface
+    - key: enum.StoreUiKey.Key
+      type: StoreBoundUserInterface
   - type: Sprite
     drawdepth: Mobs
     layers:
@@ -1155,6 +1157,7 @@
       path: /Audio/Animals/monkey_scream.ogg
   - type: IdExaminable
   - type: AlwaysRevolutionaryConvertible
+
 
 - type: entity
   name: kobold

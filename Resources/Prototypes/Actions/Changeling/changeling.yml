@@ -14,6 +14,8 @@
   description: action-changeling-sting-extract-desc
   noSpawn: true
   components:
-    - type: InstantAction
+    - type: EntityTargetAction
       icon: Interface/Actions/LingActions/Evolve/Sting_extract.png
       event: !type:ChangelingStingExtractActionEvent
+
+

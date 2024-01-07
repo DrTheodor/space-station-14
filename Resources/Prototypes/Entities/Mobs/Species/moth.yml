@@ -113,6 +113,10 @@
         sprite: "Effects/creampie.rsi"
         state: "creampie_moth"
         visible: false
+  - type: UserInterface
+    interfaces:
+      - key: enum.StoreUiKey.Key
+        type: StoreBoundUserInterface
 
 - type: entity
   parent: BaseSpeciesDummy

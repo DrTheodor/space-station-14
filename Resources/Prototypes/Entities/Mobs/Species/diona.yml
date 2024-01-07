@@ -98,6 +98,10 @@
   - type: BodyEmotes
     soundsId: DionaBodyEmotes
   - type: IgnoreKudzu
+  - type: UserInterface
+    interfaces:
+      - key: enum.StoreUiKey.Key
+        type: StoreBoundUserInterface
 
 - type: entity
   parent: BaseSpeciesDummy

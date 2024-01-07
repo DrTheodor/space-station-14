@@ -26,6 +26,7 @@ public sealed partial class ChangelingEvolveActionEvent : InstantActionEvent
 {
 }
 
-public sealed partial class ChangelingStingExtractActionEvent : InstantActionEvent
+public sealed partial class ChangelingStingExtractActionEvent : EntityTargetActionEvent
 {
 }
+

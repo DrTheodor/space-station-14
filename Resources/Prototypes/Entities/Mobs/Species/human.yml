@@ -20,6 +20,10 @@
     spawned:
     - id: FoodMeatHuman
       amount: 5
+  - type: UserInterface
+    interfaces:
+      - key: enum.StoreUiKey.Key
+        type: StoreBoundUserInterface
 
 - type: entity
   parent: BaseSpeciesDummy

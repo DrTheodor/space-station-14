@@ -40,6 +40,10 @@
           - MobMask
         layer:
           - MobLayer
+  - type: UserInterface
+    interfaces:
+      - key: enum.StoreUiKey.Key
+        type: StoreBoundUserInterface
 
 - type: entity
   parent: BaseSpeciesDummy
