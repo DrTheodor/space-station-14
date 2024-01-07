@@ -16,6 +16,15 @@
   components:
     - type: EntityTargetAction
       icon: Interface/Actions/LingActions/Evolve/Sting_extract.png
+      iconOn: Interface/Actions/LingActions/Evolve/Sting_extract_on.png
       event: !type:ChangelingStingExtractActionEvent
 
-
+- type: entity
+  id: ActionChangelingTransform
+  name: action-changeling-transform-name
+  description: action-changeling-transform-desc
+  noSpawn: true
+  components:
+    - type: InstantAction
+      icon: Interface/Actions/LingActions/Ling_transform.png
+      event: !type:ChangelingTransformActionEvent
