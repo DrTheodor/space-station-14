@@ -4,6 +4,7 @@ using Content.Shared.Changeling.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager;
 
 namespace Content.Shared.Changeling;
 
@@ -14,6 +15,7 @@ public sealed class SharedChangelingSystem : EntitySystem
 {
     [Dependency] private readonly SharedActionsSystem _action = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+
 
     [ValidatePrototypeId<EntityPrototype>]
     private const string ChangelingEvolveId = "ActionChangelingEvolve";
@@ -31,11 +33,8 @@ public sealed class SharedChangelingSystem : EntitySystem
 
     private void OnStartup(EntityUid uid, ChangelingComponent component, ComponentStartup args)
     {
-        if (!TryComp(uid, out ActionsComponent? comp))
-            return;
-
-        _action.AddAction(uid, ref component.ActionEvolveEntity, ChangelingEvolveId, component: comp);
-        _action.AddAction(uid, ref component.ActionTransformEntity, ChangelingTransformId, component: comp);
+        _action.AddAction(uid, ref component.ActionEvolveEntity, ChangelingEvolveId);
+        _action.AddAction(uid, ref component.ActionTransformEntity, ChangelingTransformId);
     }
 
 
@@ -45,7 +44,8 @@ public sealed class SharedChangelingSystem : EntitySystem
         if (component.Chemicals >= 5)
         {
             RemComp<HumanoidAppearanceComponent>(uid);
-            AddComp(uid, component.DnaBank.ElementAt(-1).Value);
+
+            AddComp(uid, component.DnaBank.Last().Value);
         }
         else if (component.Chemicals < 5)
         {

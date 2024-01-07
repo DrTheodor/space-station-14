@@ -27,7 +27,7 @@ public sealed partial class ChangelingComponent : Component
     public FixedPoint2 ChemicalsPerSecond = 1.0f;
 
     [ViewVariables(VVAccess.ReadWrite)]
-    public Dictionary<string, HumanoidAppearanceComponent> DnaBank;
+    public Dictionary<string, HumanoidAppearanceComponent> DnaBank = new();
 
     [ViewVariables]
     public float Accumulator = 0;

@@ -9,6 +9,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Popups;
 using Content.Shared.Revenant.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager;
 
 namespace Content.Server.Changeling;
 
@@ -22,6 +23,7 @@ public sealed class ChangelingSystem : EntitySystem
 
     [Dependency] private readonly StoreSystem _store = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly ISerializationManager _serializationManager = default!;
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -45,8 +47,8 @@ public sealed class ChangelingSystem : EntitySystem
         if (HasComp<HumanoidAppearanceComponent>(args.Target) && component.Chemicals >= 25)
         {
             _popup.PopupEntity(Loc.GetString("changeling-sting-extract-popup") + Name(args.Target), uid, uid);
-            component.DnaBank[Name(args.Target)] = Comp<HumanoidAppearanceComponent>(args.Target);
 
+            component.DnaBank[Name(args.Target)] = _serializationManager.CreateCopy(Comp<HumanoidAppearanceComponent>(args.Target), notNullableOverride: true);
             ChangeChemicalsAmount(uid, -25, component);
         }
         else if (component.Chemicals < 25)
