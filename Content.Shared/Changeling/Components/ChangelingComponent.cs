@@ -2,6 +2,7 @@
 using Content.Shared.Actions;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
+using Content.Shared.IdentityManagement.Components;
 
 namespace Content.Shared.Changeling.Components;
 
@@ -27,7 +28,7 @@ public sealed partial class ChangelingComponent : Component
     public FixedPoint2 ChemicalsPerSecond = 1.0f;
 
     [ViewVariables(VVAccess.ReadWrite)]
-    public Dictionary<string, HumanoidAppearanceComponent> DnaBank = new();
+    public Dictionary<string, List<Component>> DnaBank = new();
 
     [ViewVariables]
     public float Accumulator = 0;

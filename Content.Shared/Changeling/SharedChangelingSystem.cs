@@ -2,6 +2,7 @@
 using Content.Shared.Actions;
 using Content.Shared.Changeling.Components;
 using Content.Shared.Humanoid;
+using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
@@ -28,7 +29,7 @@ public sealed class SharedChangelingSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<ChangelingComponent, ComponentStartup>(OnStartup);
 
-        SubscribeLocalEvent<ChangelingComponent, ChangelingTransformActionEvent>(OnTransform);
+
     }
 
     private void OnStartup(EntityUid uid, ChangelingComponent component, ComponentStartup args)
@@ -37,20 +38,5 @@ public sealed class SharedChangelingSystem : EntitySystem
         _action.AddAction(uid, ref component.ActionTransformEntity, ChangelingTransformId);
     }
 
-
-
-    private void OnTransform(EntityUid uid, ChangelingComponent component, ChangelingTransformActionEvent args)
-    {
-        if (component.Chemicals >= 5)
-        {
-            RemComp<HumanoidAppearanceComponent>(uid);
-
-            AddComp(uid, component.DnaBank.Last().Value);
-        }
-        else if (component.Chemicals < 5)
-        {
-            _popup.PopupEntity(Loc.GetString("changeling-not-enough-chemicals-popup"), uid, uid);
-        }
-    }
 }
 
