@@ -1,4 +1,5 @@
 using Content.Shared.Access;
+using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Roles;
 using Content.Shared.StatusIcon;
@@ -116,6 +117,10 @@ namespace Content.Shared.Roles
 
         [DataField("extendedAccessGroups", customTypeSerializer: typeof(PrototypeIdListSerializer<AccessGroupPrototype>))]
         public IReadOnlyCollection<string> ExtendedAccessGroups { get; private set; } = Array.Empty<string>();
+
+        // If empty - assume that the job has NO restrictions on allowed species.
+        [DataField("allowedSpecies", customTypeSerializer: typeof(PrototypeIdListSerializer<SpeciesPrototype>))]
+        public IReadOnlyCollection<string> AllowedSpecies { get; private set; } = Array.Empty<string>();
     }
 
     /// <summary>

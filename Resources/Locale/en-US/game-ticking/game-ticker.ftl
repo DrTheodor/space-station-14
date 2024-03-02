@@ -40,3 +40,6 @@ latejoin-arrivals-direction-time = A shuttle transferring you to your station wi
 
 preset-not-enough-ready-players = Can't start {$presetName}. Requires {$minimumPlayers} players but we have {$readyPlayersCount}.
 preset-no-one-ready = Can't start {$presetName}. No players are ready.
+
+player-racist = You can't play on this job with this species!
+            Allowed species: {$allowed}

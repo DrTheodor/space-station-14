@@ -31,6 +31,9 @@
   - !type:AddComponentSpecial
     components:
       - type: CommandStaff
+  allowedSpecies:
+    - Human
+    - SlimePerson
 
 - type: startingGear
   id: CaptainGear
