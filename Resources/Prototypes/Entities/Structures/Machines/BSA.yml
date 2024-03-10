@@ -1,0 +1,47 @@
+﻿- type: entity
+  id: MachineArtilleryFixed
+  parent: BaseMachinePowered
+  name: Блспейс артиллерия
+  description: Огромная машина, позволяющая полностью уничтожать цели одним нажатием кнопки
+  placement:
+    mode: AlignTileAny
+  components:
+    - type: SpriteFade
+    - type: Sprite
+      sprite: /Uploaded/BSA.rsi
+      offset: 0,1
+      drawdepth: Mobs
+      scale: 0.5, 0.5
+      noRot: true
+      layers:
+        - state: BSA
+    - type: Transform
+      anchored: true
+    - type: ApcPowerReceiver
+      powerLoad: 1500
+    - type: ExtensionCableReceiver
+    - type: AmbientSound
+      range: 5
+      volume: -6
+      sound:
+        path: /Audio/Ambience/Objects/gravity_gen_hum.ogg
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-1.5,-0.5,1.5,0.6"
+          density: 50
+          mask:
+            - LargeMobMask
+          layer:
+            - WallLayer
+    - type: Appearance
+    - type: GenericVisualizer
+      visuals:
+        enum.PowerDeviceVisuals.Powered:
+          enum.PowerDeviceVisualLayers.Powered:
+            True: { visible: true }
+            False: { visible: false }

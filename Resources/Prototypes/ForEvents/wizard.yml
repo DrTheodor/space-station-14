@@ -1,0 +1,881 @@
+# Переплёт книжки эротических фанфиков про ЦентКом
+
+- type: entity
+  parent: BaseItem
+  id: SpellShop
+  name: Книга заклинаний
+  description: Содержит в себе разные заклинания. Выбирайте, что изучить тщательно, вы можете несколько раз изучать одно и то же заклинание, чтобы использовать его чаще.
+  suffix: Wizard
+  components:
+    - type: Sprite
+      sprite: Objects/Misc/books.rsi
+      layers:
+        - state: book0
+          map: [ "enum.DamageStateVisualLayers.Base" ]
+    - type: UserInterface
+      interfaces:
+        - key: enum.StoreUiKey.Key
+          type: StoreBoundUserInterface
+    - type: ActivatableUI
+      key: enum.StoreUiKey.Key
+    - type: Store
+      preset: StorePresetSpellbook
+      balance:
+        KnowledgePoints: 10
+
+# IQ читателя
+- type: currency
+  id: KnowledgePoints
+  displayName: Очки знаний
+  canWithdraw: false
+
+# Её бумага
+- type: storePreset
+  id: StorePresetSpellbook
+  storeName: Книга заклинаний
+  categories:
+    - Spells
+    - Staffs
+    - Equipment
+    - OtherWizard
+    - PointlessWizard
+  currencyWhitelist:
+    - KnowledgePoints
+
+# Её оглавление
+- type: storeCategory
+  id: Spells
+  name: Заклинания
+
+- type: storeCategory
+  id: Staffs
+  name: Посохи
+
+- type: storeCategory
+  id: Equipment
+  name: Экипировка
+
+- type: storeCategory
+  id: OtherWizard
+  name: Другое
+
+- type: storeCategory
+  id: PointlessWizard
+  name: Бесполезное
+# И её содержание
+
+
+- type: listing
+  id: SpellForceWallListing
+  name: Магическая стена
+  description: Научитесь вызывать магическую стену для защиты, размером 1x3. ТЫ НЕ ПРОЙДЕШЬ!
+  productAction: ActionForceWall
+  categories:
+    - Spells
+  cost:
+    KnowledgePoints: 1
+
+- type: listing
+  id: SpellBlinkListing
+  name: Мгновенная Телепортация
+  description: С помощью данного заклинания вы сможете мгновенно телепортироваться в любое место в поле вашего зрения. Позволяет быстро ворваться в поединок и настолько же быстро из него сбежать.
+  productAction: ActionBlink
+  categories:
+    - Spells
+  cost:
+    KnowledgePoints: 2
+
+- type: listing
+  id: SpellSmiteListing
+  name: Кара
+  description: Научитесь разрывать людей на органы одним своим прикосновением. Разрывайте на органы фелинидов, ящеров, ксенофобов, разорвите ассистента в техах и вон того СБшника!
+  productAction: ActionSmite
+  categories:
+    - Spells
+  cost:
+    KnowledgePoints: 2
+
+- type: listing
+  id: SpellKnockListing
+  name: Стук
+  description: Научитесь открывать все двери вокруг с помощью своей магии.
+  productAction: ActionKnock
+  categories:
+    - Spells
+  cost:
+    KnowledgePoints: 1
+
+# Кастомные заклинания с их прототипом для магазина
+
+- type: entity
+  id: ActionFireballWiz
+  name: Fireball
+  description: Fires an explosive fireball towards the clicked location.
+  noSpawn: true
+  components:
+    - type: WorldTargetAction
+      useDelay: 6
+      itemIconStyle: BigAction
+      checkCanAccess: false
+      range: 60
+      sound: !type:SoundPathSpecifier
+        path: /Audio/Magic/fireball.ogg
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: fireball
+      event: !type:ProjectileSpellEvent
+        prototype: ProjectileFireball
+        posData: !type:TargetCasterPos
+        speech: action-speech-spell-fireball
+
+- type: listing
+  id: SpellFireballListing
+  name: Огненный шар
+  description: Научитесь вызывать огненный шар в сторону ваших врагов. Да поглотит эту станцию праведный огонь!
+  productAction: ActionFireballWiz
+  categories:
+    - Spells
+  cost:
+    KnowledgePoints: 2
+
+- type: entity
+  id: ActionBallLightning
+  name: Шаровая молния
+  description: Испускает шаровую молнию из ваших рук.
+  noSpawn: true
+  components:
+    - type: WorldTargetAction
+      useDelay: 30
+      itemIconStyle: BigAction
+      checkCanAccess: false
+      range: 60
+      sound: !type:SoundPathSpecifier
+        path: /Audio/Effects/Lightning/lightningshock.ogg
+      icon:
+        sprite: Structures/Power/Generation/Tesla/energy_miniball.rsi
+        state: tesla_projectile
+      event: !type:ProjectileSpellEvent
+        prototype: TeslaGunBullet
+        posData: !type:TargetCasterPos
+        speech: P'WAH, UNLIM'TED P'WAH
+
+- type: listing
+  id: SpellLightningBallListing
+  name: Шаровая молния
+  description: Научитесь выпускать во врагов шаровую молнию, подобную тем, что летают вокруг двигателя теслы.
+  productAction: ActionBallLightning
+  categories:
+    - Spells
+  cost:
+    KnowledgePoints: 2
+
+#Морф палки
+- type: entity
+  parent: SimpleMobBase
+  id: ImmovableRodWizard
+  suffix: Wizard
+  components:
+    - type: MovementIgnoreGravity
+    - type: Sprite
+      sprite: Objects/Fun/immovable_rod.rsi
+      state: icon
+      noRot: false
+    - type: ImmovableRod
+      randomizeVelocity: false
+      destroyTiles: false
+#    - type: Projectile
+#      soundHit:
+#        path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+#      damage:
+#        types:
+#          Structural: 1000000
+#        groups:
+#          Brute: 1000000
+    - type: MovementSpeedModifier
+      baseSprintSpeed: 12
+      baseWalkSpeed: 12
+    - type: MobState
+    - type: MobThresholds
+      thresholds:
+        0: Alive
+        100: Dead
+#    - type: PassiveDamage
+#      allowedStates:
+#        - Alive
+#      damage:
+#        types:
+#          Slash: 100
+
+- type: polymorph
+  id: RodMorph
+  configuration:
+    entity: ImmovableRodWizard
+    forced: false
+    transferName: false
+    transferDamage: false
+    revertOnDeath: true
+    revertOnCrit: true # Не хочет ревертаться на ВД, потому, этот спелл удален, на обычной сборке сработает.
+    revertOnEat: true
+    allowRepeatedMorphs: true
+    duration: 1
+
+- type: entity
+  id: ProjectilePolyboltRod
+  parent: BaseBullet
+  noSpawn: true
+  components:
+    - type: Sprite
+      sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+      layers:
+        - state: spell
+          color: '#00FF00'
+    - type: Projectile
+      ignoreShooter: false
+      damage:
+        types:
+          Piercing: 0
+    - type: PolymorphOnCollide
+      polymorph: RodMorph
+      whitelist:
+        components:
+          - Body
+
+- type: entity
+  id: ActionRodMorph
+  name: Форма стержня
+  description: Превращает вас в медленный неубираемый стержень на 1 секунду.
+  noSpawn: true
+  components:
+    - type: WorldTargetAction
+      useDelay: 30
+      itemIconStyle: BigAction
+      checkCanAccess: false
+      range: 60
+      sound: !type:SoundPathSpecifier
+        path: /Audio/Weapons/Guns/Gunshots/Magic/staff_animation.ogg
+      icon:
+        sprite: Objects/Fun/immovable_rod.rsi
+        state: icon
+      event: !type:ProjectileSpellEvent
+        prototype: ProjectilePolyboltRod
+        posData: !type:TargetCasterPos
+        speech: CLANG!
+
+#- type: listing
+#  id: SpellRodMorphListing
+#  name: Форма стержня
+#  description: Научитесь превращаться в стержень, уничтожающий все на своем пути
+#  productAction: ActionRodMorph
+#  categories:
+#    - Spells
+#  cost:
+#    KnowledgePoints: 2
+# Проехали стержень, работаем дальше
+
+#ХААААЛККК
+
+- type: polymorph
+  id: HulkMorph
+  configuration:
+    entity: HulkWizard
+    forced: false
+    transferName: true
+    transferDamage: false
+    revertOnDeath: true
+    revertOnCrit: false
+    allowRepeatedMorphs: true
+
+- type: entity
+  parent: BaseMobHuman
+  id: HulkWizard
+  suffix: Wizard
+  name: Халк
+  description: Могучее существо, способное ЛОМАТЬ и КРУШИТЬ.
+  components:
+    - type: Sprite
+      scale: 2.0, 2.0
+      color: '#116911'
+    - type: StatusEffects
+      allowed:
+        - SlowedDown
+        - SeeingRainbows
+        - Electrocution
+        - Drunk
+        - SlurredSpeech
+        - RatvarianLanguage
+        - PressureImmunity
+        - ForcedSleep
+        - TemporaryBlindness
+        - Pacified
+        - StaminaModifier
+        - AllCaps
+    - type: CombatMode
+    - type: MeleeWeapon
+      hidden: true
+      damage:
+        types:
+          Structural: 30
+        groups:
+          Brute: 20
+    - type: MobThresholds
+      thresholds:
+        0: Alive
+        400: Dead
+    - type: Inventory
+      templateId: hulk
+
+- type: inventoryTemplate
+  id: hulk
+
+- type: entity
+  id: ActionHulkMorph
+  name: Мутация
+  description: Превращает вас в могучего халка.
+  noSpawn: true
+  components:
+    - type: WorldTargetAction
+      useDelay: 40
+      itemIconStyle: BigAction
+      checkCanAccess: false
+      range: 60
+      sound: !type:SoundPathSpecifier
+        path: /Audio/Weapons/Guns/Gunshots/Magic/staff_animation.ogg
+      icon:
+        sprite: Mobs/Species/Human/parts.rsi
+        state: full
+      event: !type:ProjectileSpellEvent
+        prototype: ProjectilePolyboltHulk
+        posData: !type:TargetCasterPos
+        speech: BIRUZ BENNAR!
+
+- type: entity
+  id: ProjectilePolyboltHulk
+  parent: BaseBullet
+  noSpawn: true
+  components:
+    - type: Sprite
+      sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+      layers:
+        - state: spell
+          color: '#116911'
+    - type: Projectile
+      ignoreShooter: false
+      damage:
+        types:
+          Piercing: 0
+    - type: PolymorphOnCollide
+      polymorph: HulkMorph
+      whitelist:
+        components:
+          - Body
+
+- type: listing
+  id: SpellMutateListing
+  name: Мутация
+  description: Научитесь мутировать в халка. КРУШИТЬ, ЛОМАТЬ!
+  productAction: ActionHulkMorph
+  categories:
+    - Spells
+  cost:
+    KnowledgePoints: 2
+
+# Ах, обожаю полиморфы!
+
+- type: polymorph
+  id: MouseMorph
+  configuration:
+    entity: MobMouse
+    forced: false
+    transferName: false
+    transferDamage: false
+    revertOnDeath: false
+    revertOnCrit: false
+    allowRepeatedMorphs: true
+
+- type: entity
+  id: ActionMouseMorph
+  name: Формоизменение
+  description: Превращает вас в мышь.
+  noSpawn: true
+  components:
+    - type: WorldTargetAction
+      useDelay: 20
+      itemIconStyle: BigAction
+      checkCanAccess: false
+      range: 60
+      sound: !type:SoundPathSpecifier
+        path: /Audio/Weapons/Guns/Gunshots/Magic/staff_animation.ogg
+      icon:
+        sprite: Mobs/Animals/Mouse.rsi
+        state: icon-0
+      event: !type:ProjectileSpellEvent
+        prototype: ProjectilePolyboltMouse
+        posData: !type:TargetCasterPos
+        speech: RAC'WA NO!
+
+- type: entity
+  id: ProjectilePolyboltMouse
+  parent: BaseBullet
+  noSpawn: true
+  components:
+    - type: Sprite
+      sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+      layers:
+        - state: spell
+          color: '#116911'
+    - type: Projectile
+      ignoreShooter: false
+      damage:
+        types:
+          Piercing: 0
+    - type: PolymorphOnCollide
+      polymorph: MouseMorph
+      whitelist:
+        components:
+          - Body
+
+- type: listing
+  id: SpellShapeshiftListing
+  name: Формоизменение
+  description: Научитесь превращаться в мышь и обратно. Можете использовать это, чтобы лазить под дверьми, или провести всю смену, издвеваясь над поваром. ПРЕДУПРЕЖДЕНИЕ - смерть в форме мыши убьет вас окончательно.
+  productAction: ActionMouseMorph
+  categories:
+    - Spells
+  cost:
+    KnowledgePoints: 1
+
+# И на последок - смешнявка
+
+- type: entity
+  id: ActionCluwneWiz
+  name: Клувнификация
+  description: Испускает заряд, клувнифицирующий того, в кого он попадёт.
+  noSpawn: true
+  components:
+    - type: WorldTargetAction
+      useDelay: 60
+      itemIconStyle: BigAction
+      checkCanAccess: false
+      range: 60
+      sound: !type:SoundPathSpecifier
+        path: /Audio/Magic/fireball.ogg
+      icon:
+        sprite: Clothing/Mask/cluwne.rsi
+        state: icon
+      event: !type:ProjectileSpellEvent
+        prototype: ProjectilePolyboltCluwne
+        posData: !type:TargetCasterPos
+        speech: NWOLC EGNEVER
+
+- type: listing
+  id: SpellCluwneListing
+  name: Проклятие клувни
+  description: Научитесь испускать заряд, клувнифицирующий того, в кого он попадет. Экипаж может убивать клувней без сожаления и кары богов.
+  productAction: ActionCluwneWiz
+  categories:
+    - Spells
+  cost:
+    KnowledgePoints: 2
+
+# Ладно, не на последок... Опять полиморфы!
+
+- type: polymorph
+  id: GhostMorph
+  configuration:
+    entity: MobObserverWizard
+    forced: false
+    transferName: true
+    transferDamage: false
+    revertOnDeath: true
+    revertOnCrit: false
+    allowRepeatedMorphs: false
+    duration: 1
+
+- type: entity
+  id: ActionGhostMorph
+  name: Эфирная прогулка
+  description: Даёт вам прогуляться насквозь всего сущего
+  noSpawn: true
+  components:
+    - type: WorldTargetAction
+      useDelay: 30
+      itemIconStyle: BigAction
+      checkCanAccess: false
+      range: 60
+      sound: !type:SoundPathSpecifier
+        path: /Audio/Weapons/Guns/Gunshots/Magic/staff_animation.ogg
+      icon:
+        sprite: Objects/Magic/magicactions.rsi
+        state: blink
+      event: !type:ProjectileSpellEvent
+        prototype: ProjectilePolyboltGhost
+        posData: !type:TargetCasterPos
+
+- type: entity
+  id: ProjectilePolyboltGhost
+  parent: BaseBullet
+  noSpawn: true
+  components:
+    - type: Sprite
+      sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+      layers:
+        - state: spell
+          color: '#34c0eb'
+    - type: Projectile
+      ignoreShooter: false
+      damage:
+        types:
+          Piercing: 0
+    - type: PolymorphOnCollide
+      polymorph: GhostMorph
+      whitelist:
+        components:
+          - Body
+
+- type: entity
+  parent: BaseMob
+  id: MobObserverWizard
+  name: observer
+  description: Boo!
+  noSpawn: true
+  components:
+    - type: CargoSellBlacklist
+    - type: ContentEye
+      maxZoom: 1.44,1.44
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeCircle
+            radius: 0.35
+          density: 15
+          mask:
+            - GhostImpassable
+    - type: Eye
+      drawFov: false
+    - type: Input
+      context: "ghost"
+    - type: Examiner
+      skipChecks: true
+    - type: GhostHearing
+    - type: MovementSpeedModifier
+      baseSprintSpeed: 12
+      baseWalkSpeed: 8
+    - type: MovementIgnoreGravity
+    - type: IntrinsicRadioReceiver
+    - type: ActiveRadio
+      receiveAllChannels: true
+      globalReceive: true
+    - type: Physics
+      bodyType: KinematicController
+      bodyStatus: InAir
+    - type: CanMoveInAir
+    - type: Tag
+      tags:
+        - BypassInteractionRangeChecks
+
+- type: listing
+  id: SpellEtherealJauntListing
+  name: Эфирная прогулка
+  description: Научитесь растворяться в воздухе и проходить насквозь всего сущего.
+  productAction: ActionGhostMorph
+  categories:
+    - Spells
+  cost:
+    KnowledgePoints: 2
+
+# Большие, черные, длинные п...осохи
+
+- type: listing
+  id: StaffHealingListing
+  name: Посох исцеления
+  description: Испускает заряды, исцеляющие того, в кого они попали. Вряд ли пригадится в вашем кровавом приключении, если, конечно, у вас нет помошника.
+  productEntity: WeaponStaffHealing
+  cost:
+    KnowledgePoints: 1
+  categories:
+    - Staffs
+
+- type: listing
+  id: StaffPolymorphDoorListing
+  name: Посох создания дверей
+  description: Испускает заряды, превращающие все, куда они попадут в деревянные двери, в том числе и другие двери.
+  productEntity: WeaponStaffPolymorphDoor
+  cost:
+    KnowledgePoints: 1
+  categories:
+    - Staffs
+
+# Экипировка
+
+- type: listing
+  id: WizardHardsuitListing
+  name: Скафандр мага
+  description: Скафандр, который защитит вас от разгерметизации и урона.
+  productEntity: ClothingOuterHardsuitWizard
+  cost:
+    KnowledgePoints: 2
+  categories:
+    - Equipment
+
+- type: listing
+  id: WandAssortmentListing
+  name: Набор волшебных палочек
+  description: Набор волшебных палочек, куда входит палочка полиморфа в карпа, создания дверей, огненного шара и мгновенной смерти. Они не регенерируют заряды.
+  productEntity: ClothingBeltWandFilled
+  cost:
+    KnowledgePoints: 2
+  categories:
+    - Equipment
+
+# Другое
+
+- type: listing
+  id: MagicLampListing
+  name: Магическая лампа
+  description: Магическая лампа, призывающая ифрита при использовании, ифрит будет вас защищать, однако весь урон, полученный ифритом будет нанесен и вам.
+  productEntity: MagicalLamp
+  cost:
+    KnowledgePoints: 2
+  categories:
+    - OtherWizard
+
+#Шариком было полностью насрано, он вырезан
+
+#- type: listing
+#  id: ScryingOrbListing
+#  name: Гадательный шар
+#  description: Шар, позволяющий вам превратиться в призрака
+#  productEntity: ScryingOrb
+#  cost:
+#    KnowledgePoints: 2
+#  categories:
+#    - OtherWizard
+
+# Подкрепление
+
+- type: entity
+  parent: MobHuman
+  id: MobHumanWizardApprentice
+  name: Ученик мага
+  suffix: Human
+  components:
+    - type: Loadout
+      prototypes: [WizardApprenticeGear]
+    - type: RandomMetadata
+      nameSegments:
+        - names_wizard_first
+        - names_wizard_last
+    - type: NpcFactionMember
+      factions:
+        - Syndicate
+
+- type: startingGear
+  id: WizardApprenticeGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorDarkBlue
+    back: ClothingBackpackSatchelFilledApprentice
+    head: ClothingHeadHatWizard
+    outerClothing: ClothingOuterWizard
+    shoes: ClothingShoesWizard
+    id: PassengerPDA
+    ears: ClothingHeadsetService
+  innerClothingSkirt: ClothingUniformJumpskirtColorDarkBlue
+  satchel: ClothingBackpackSatchelFilledApprentice
+
+- type: entity
+  noSpawn: true
+  parent: ClothingBackpackSatchel
+  id: ClothingBackpackSatchelFilledApprentice
+  components:
+    - type: StorageFill
+      contents:
+        - id: SpellShopThreePoints
+
+- type: entity
+  parent: SpellShop
+  id: SpellShopThreePoints
+  suffix: 3 Очка знаний
+  components:
+    - type: Store
+      preset: StorePresetSpellbook
+      balance:
+        KnowledgePoints: 3
+
+- type: entity
+  parent: BaseItem
+  id: ContractOfApprenticeship
+  name: Контракт ученичества
+  description: Призывает ученика мага.
+  components:
+    - type: Sprite
+      sprite: Objects/Magic/magicactions.rsi
+      layers:
+        - state: spell_default
+    - type: GhostRole
+      name: Ученик мага
+      description: Вы - ученик мага. Ваша задача - помогать вашему наставнику. У вас гораздо менее обширные познания, чем у учителя.
+      rules: Вы не можете помнить что-либо о вашей прошлой жизни. Вы не можете навредить своему наставнику. Вы ОБЯЗАНЫ слушать учителя и помогать ему.
+    - type: GhostRoleMobSpawner
+      prototype: MobHumanWizardApprentice
+    - type: EmitSoundOnUse
+      sound: /Audio/Effects/Emotes/parp1.ogg
+    - type: UseDelay
+      delay: 300
+
+- type: listing
+  id: ContractOfApprenticeshipListing
+  name: Контракт ученичества
+  description: Позволяет нанять себе ученика. У него гораздо менее обширные познания, чем у вас, а значит изучить он сможет гораздо меньше.
+  productEntity: ContractOfApprenticeship
+  cost:
+    KnowledgePoints: 2
+  categories:
+    - OtherWizard
+
+# Бесполезное
+
+- type: entity
+  name: Печать Федерации Магов
+  parent: RubberStampBase
+  id: RubberStampWizard
+  suffix: DO NOT MAP
+  components:
+    - type: Stamp
+      stampedName: Федерация Магов
+      stampedColor: "#720e99"
+      stampState: "paper_stamp-clown"
+    - type: Sprite
+      state: stamp-clown
+
+- type: listing
+  id: RubberStampWizardListing
+  name: Печать Федерации магов
+  description: Позволяет красиво запугивать персонал. Всего вы можете создать 3 штуки.
+  productEntity: RubberStampWizard
+  cost:
+    KnowledgePoints: 0
+  categories:
+    - PointlessWizard
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 3
+
+- type: listing
+  id: WizardFigurineListing
+  name: Фигурка волшебника
+  description: Какой красивый! Вы можете создать лишь одну штуку.
+  productEntity: ToyFigurineWizard
+  cost:
+    KnowledgePoints: 0
+  categories:
+    - PointlessWizard
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 1
+
+- type: listing
+  id: FakeWizardFigurineListing
+  name: Фигурка волшебника
+  description: Какой красив... Стоп, это же подделка! Всего вы можете создать 3 штуки.
+  productEntity: ToyFigurineWizardFake
+  cost:
+    KnowledgePoints: 0
+  categories:
+    - PointlessWizard
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 3
+
+- type: listing
+  id: PlushieRatvarListing
+  name: Плюшевый Ратвар
+  description: У бедняги подгорело... Ахах, Поняли? Подгорело? А?! Он же на лаваленде заперт дошло, а?! Всего вы можете создать 3 штуки.
+  productEntity: PlushieRatvar
+  cost:
+    KnowledgePoints: 0
+  categories:
+    - PointlessWizard
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 3
+
+- type: listing
+  id: PlushieNarListing
+  name: Плюшевая Нар'Си
+  description: Что мина такая грустная? Не нравится что я получил силы твоих послушников без танцев с бубном? Всего вы можете создать 3 штуки.
+  productEntity: PlushieNar
+  cost:
+    KnowledgePoints: 0
+  categories:
+    - PointlessWizard
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 3
+
+- type: listing
+  id: ClothingHeadHatCatEarsWizListing
+  name: Кошачьи ушки
+  description: Покажите, что вы уже в край выжили из ума. Всего вы можете создать 3 штуки.
+  productEntity: ClothingHeadHatCatEars
+  cost:
+    KnowledgePoints: 0
+  categories:
+    - PointlessWizard
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 3
+
+# Консоль
+- type: entity
+  parent: ComputerComms
+  id: WizardComputerComms
+  name: Консоль коммуникации магов
+  description: Консоль, позволяющая взломать систему оповещений станции, и рассказать им о приключениях Гамлета с клоуном в техах.
+  components:
+    - type: Sprite
+      layers:
+        - map: ["computerLayerBody"]
+          state: computer
+        - map: ["computerLayerKeyboard"]
+          state: generic_keyboard
+        - map: ["computerLayerScreen"]
+          state: telesci
+        - map: ["computerLayerKeys"]
+          state: syndie_key
+    - type: AccessReader
+      access: [[ ]]
+    - type: CommunicationsConsole
+      title: Федерация Магов
+      color: "#7e26ad"
+      canShuttle: false
+      global: true #announce to everyone they're about to fuck shit up
+      sound: /Audio/Announcements/war.og
+    - type: Computer
+      board: WizardComputerCommsCircuitboard
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#f71713"
+
+- type: entity
+  parent: BaseComputerCircuitboard
+  id: WizardComputerCommsCircuitboard
+  name: Плата консоли коммуникации магов
+  description: Печатная плата консоли коммуникации магов.
+  components:
+    - type: ComputerBoard
+      prototype: WizardComputerComms
+
+- type: listing
+  id: WizardComputerCommsCircuitboardListing
+  name: Плата консоли коммуникации магов
+  description: С помощью нее вы сможете собрать компьютер коммуникации магов. Позволяет громко запугать команду! Всего вы можете создать 3 штуки.
+  productEntity: WizardComputerCommsCircuitboard
+  cost:
+    KnowledgePoints: 0
+  categories:
+    - PointlessWizard
+  conditions:
+    - !type:ListingLimitedStockCondition
+      stock: 3

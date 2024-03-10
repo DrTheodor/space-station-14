@@ -88,12 +88,10 @@ public sealed class ChangelingSystem : EntitySystem
 
     public void AddDna(ChangelingComponent component, EntityUid target)
     {
-        component.DnaBank[Name(target)] =
-            [
-                _serializationManager.CreateCopy(Comp<HumanoidAppearanceComponent>(target), notNullableOverride: true),
-                _serializationManager.CreateCopy(Comp<DnaComponent>(target), notNullableOverride: true),
-                _serializationManager.CreateCopy(Comp<FingerprintComponent>(target), notNullableOverride: true)
-            ];
+        component.DnaBank[Name(target)] = new DnaBankEntryComponent();
+
+        _serializationManager.CreateCopy(Comp<HumanoidAppearanceComponent>(target), notNullableOverride: true);
+
     }
 
     private void OnTransform(EntityUid uid, ChangelingComponent component, ChangelingTransformActionEvent args)
@@ -103,10 +101,10 @@ public sealed class ChangelingSystem : EntitySystem
             RemComp<HumanoidAppearanceComponent>(uid);
             RemComp<DnaComponent>(uid);
             RemComp<FingerprintComponent>(uid);
-
+            /*
             AddComp(uid, component.DnaBank.Last().Value[0]);
             AddComp(uid, component.DnaBank.Last().Value[1]);
-            AddComp(uid, component.DnaBank.Last().Value[2]);
+            AddComp(uid, component.DnaBank.Last().Value[2]); */
 
             RenameLing(component.DnaBank.Last().Key, uid);
         }
