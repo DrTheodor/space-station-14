@@ -1,0 +1,33 @@
+﻿- type: entity
+  id: ai
+  name: ai-name
+  description: ai-desc
+  components:
+    - type: MindContainer
+    - type: InputMover
+    - type: MobMover
+    - type: Input
+      context: "ghost"
+    - type: MovementSpeedModifier
+      baseWalkSpeed: 8
+      baseSprintSpeed: 8
+    - type: Sprite
+      noRot: true
+      drawdepth: Ghosts
+      sprite: \Markers\cross.rsi
+      layers:
+        - state: red
+    - type: Visibility
+      layer: 2 #ghost vis layer
+    - type: Physics
+      bodyType: KinematicController
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeCircle
+            radius: 0.40
+          density: 80
+          mask:
+            - GhostImpassable
+
