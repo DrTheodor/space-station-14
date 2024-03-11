@@ -1,0 +1,127 @@
+﻿- type: entity
+  name: alien-larva-name
+  parent: SimpleMobBase
+  id: MobAlienLarva
+  description: alien-larva-desc
+  components:
+    - type: Body
+      prototype: Xeno
+    - type: GhostRole
+      makeSentient: true
+      allowSpeech: true
+      allowMovement: true
+      name: ghost-role-information-alien-larva-name
+      description: ghost-role-information-alien-larva-description
+    - type: GhostTakeoverAvailable
+    - type: Speech
+      speechSounds: Vox
+      speechVerb: SmallMob
+    - type: Sprite
+      drawdepth: SmallMobs
+      sprite: Mobs/Aliens/Xenos/alien.rsi
+      layers:
+        - map: ["enum.DamageStateVisualLayers.Base", "movement"]
+          state: larva0
+    - type: SpriteMovement
+      movementLayers:
+        movement:
+          state: larva0
+      noMovementLayers:
+        movement:
+          state: larva0
+    - type: NpcFactionMember
+      factions:
+        - Xeno
+    - type: HTN
+      rootTask:
+        task: MouseCompound
+    - type: Physics
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeCircle
+            radius: 0.2
+          density: 100
+          mask:
+            - SmallMobMask
+          layer:
+            - SmallMobLayer
+    - type: MobState
+    - type: Deathgasp
+    - type: MobStateActions
+      actions:
+        Critical:
+          - ActionCritSuccumb
+          - ActionCritFakeDeath
+          - ActionCritLastWords
+    - type: MobThresholds
+      thresholds:
+        0: Alive
+        25: Dead
+    - type: MovementSpeedModifier
+      baseWalkSpeed : 5
+      baseSprintSpeed : 5
+    - type: DamageStateVisuals
+      states:
+        Alive:
+          Base: larva0
+        Critical:
+          Base: larva0_stun
+        Dead:
+          Base: larva0_dead
+    - type: Tag
+      tags:
+        - Trash
+        - VimPilot
+        - Meat
+    - type: Respirator
+      damage:
+        types:
+          Asphyxiation: 0
+      damageRecovery:
+        types:
+          Asphyxiation: 0
+    - type: Barotrauma
+      damage:
+        types:
+          Blunt: 0
+    - type: Vocal
+      sounds:
+        Male: Mouse
+        Female: Mouse
+        Unsexed: Mouse
+      wilhelmProbability: 0.001
+    - type: CombatMode
+    - type: MeleeWeapon
+      soundHit:
+        path: /Audio/Weapons/Xeno/alien_claw_flesh1.ogg
+      angle: 0
+      animation: WeaponArcBite
+      damage:
+        types:
+          Blunt: 2
+    - type: Bloodstream
+      bloodMaxVolume: 50
+      bloodReagent: InsectBlood
+    - type: MobPrice
+      price: 50
+    - type: BadFood
+    - type: NonSpreaderZombie
+    - type: PreventSpiller
+
+- type: entity
+  id: TorsoXeno
+  name: "alien torso"
+  parent: [PartHuman, BaseTorso]
+  components:
+    - type: Sprite
+      sprite: Mobs/Species/Human/parts.rsi
+      state: "torso_m"
+    - type: Extractable
+      juiceSolution:
+        reagents:
+          - ReagentId: Fat
+            Quantity: 10
+          - ReagentId: Blood
+            Quantity: 20

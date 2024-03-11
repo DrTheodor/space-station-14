@@ -79,7 +79,8 @@ public sealed class ChatUIController : UIController
         {SharedChatSystem.EmotesAltPrefix, ChatSelectChannel.Emotes},
         {SharedChatSystem.AdminPrefix, ChatSelectChannel.Admin},
         {SharedChatSystem.RadioCommonPrefix, ChatSelectChannel.Radio},
-        {SharedChatSystem.DeadPrefix, ChatSelectChannel.Dead}
+        {SharedChatSystem.DeadPrefix, ChatSelectChannel.Dead},
+        {SharedChatSystem.XenoHivemindPrefix, ChatSelectChannel.Xeno}
     };
 
     public static readonly Dictionary<ChatSelectChannel, char> ChannelPrefixes = new()
@@ -92,7 +93,8 @@ public sealed class ChatUIController : UIController
         {ChatSelectChannel.Emotes, SharedChatSystem.EmotesPrefix},
         {ChatSelectChannel.Admin, SharedChatSystem.AdminPrefix},
         {ChatSelectChannel.Radio, SharedChatSystem.RadioCommonPrefix},
-        {ChatSelectChannel.Dead, SharedChatSystem.DeadPrefix}
+        {ChatSelectChannel.Dead, SharedChatSystem.DeadPrefix},
+        {ChatSelectChannel.Xeno, SharedChatSystem.XenoHivemindPrefix}
     };
 
     /// <summary>
@@ -206,6 +208,9 @@ public sealed class ChatUIController : UIController
 
         _input.SetInputCommand(ContentKeyFunctions.FocusAdminChat,
             InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Admin)));
+
+        _input.SetInputCommand(ContentKeyFunctions.FocusXenoHivemindChat,
+            InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Xeno)));
 
         _input.SetInputCommand(ContentKeyFunctions.FocusRadio,
             InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Radio)));
@@ -482,6 +487,8 @@ public sealed class ChatUIController : UIController
         FilterableChannels |= ChatChannel.OOC;
         FilterableChannels |= ChatChannel.LOOC;
 
+        CanSendChannels |= ChatSelectChannel.Xeno;
+        FilterableChannels |= ChatChannel.XenoHivemind;
         // can always hear server (nobody can actually send server messages).
         FilterableChannels |= ChatChannel.Server;
 
