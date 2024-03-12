@@ -52,9 +52,10 @@
         Admin = ChatChannel.AdminChat,
 
         /// <summary>
-        ///     Admin chat
+        ///     Xeno Hivemind
         /// </summary>
         Xeno = ChatChannel.XenoHivemind,
+
 
         Console = ChatChannel.Unspecified
     }

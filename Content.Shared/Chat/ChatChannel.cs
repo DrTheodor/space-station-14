@@ -86,7 +86,7 @@ namespace Content.Shared.Chat
         Unspecified = 1 << 14,
 
         /// <summary>
-        ///     Unspecified.
+        ///     Xeno Hivemind
         /// </summary>
         XenoHivemind = 1 << 15,
 

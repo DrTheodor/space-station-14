@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
+using Content.Server.Body.Systems;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Speech.Components;
@@ -10,6 +11,7 @@ using Content.Server.Speech.EntitySystems;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared.ActionBlocker;
+using Content.Shared.Body.Part;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Database;
@@ -17,6 +19,8 @@ using Content.Shared.Ghost;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
+using Content.Shared.Mind;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Players;
 using Content.Shared.Radio;
@@ -57,6 +61,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
     [Dependency] private readonly ReplacementAccentSystem _wordreplacement = default!;
+    [Dependency] private readonly BodySystem _body = default!;
 
     public const int VoiceRange = 10; // how far voice goes in world units
     public const int WhisperClearRange = 2; // how far whisper goes while still being understandable, in world units
@@ -251,6 +256,9 @@ public sealed partial class ChatSystem : SharedChatSystem
             case InGameICChatType.Emote:
                 SendEntityEmote(source, message, range, nameOverride, hideLog: hideLog, ignoreActionBlocker: ignoreActionBlocker);
                 break;
+            case InGameICChatType.Xeno:
+                SendEntityXenoSpeak(source, message, range, nameOverride, hideLog, ignoreActionBlocker);
+                break;
         }
     }
 
@@ -293,6 +301,38 @@ public sealed partial class ChatSystem : SharedChatSystem
                 break;
             case InGameOOCChatType.Looc:
                 SendLOOC(source, player, message, hideChat);
+                break;
+        }
+    }
+
+    public void TrySendXenoHivemindMessage(
+        EntityUid source,
+        string message,
+        InGameOOCChatType type,
+        bool hideChat,
+        IConsoleShell? shell = null,
+        ICommonSession? player = null
+    )
+    {
+        if (!CanSendInGame(message, shell, player))
+            return;
+
+        if (player != null && !_chatManager.HandleRateLimit(player))
+            return;
+
+        // It doesn't make any sense for a non-player to send in-game OOC messages, whereas non-players may be sending
+        // in-game IC messages.
+        if (player?.AttachedEntity is not { Valid: true } entity || source != entity)
+            return;
+
+        message = SanitizeInGameOOCMessage(message);
+
+        var sendType = type;
+
+        switch (sendType)
+        {
+            case InGameOOCChatType.HiveXeno:
+                SendXenoHivemindChat(source, player, message, hideChat);
                 break;
         }
     }
@@ -366,6 +406,8 @@ public sealed partial class ChatSystem : SharedChatSystem
 
     #region Private API
 
+
+
     private void SendEntitySpeak(
         EntityUid source,
         string originalMessage,
@@ -435,6 +477,79 @@ public sealed partial class ChatSystem : SharedChatSystem
             else
                 _adminLogger.Add(LogType.Chat, LogImpact.Low,
                     $"Say from {ToPrettyString(source):user}, original: {originalMessage}, transformed: {message}.");
+        }
+    }
+
+    private void SendEntityXenoSpeak(
+        EntityUid source,
+        string originalMessage,
+        ChatTransmitRange range,
+        string? nameOverride,
+        bool hideLog = false,
+        bool ignoreActionBlocker = false
+        )
+    {
+        if (!_actionBlocker.CanSpeak(source) && !ignoreActionBlocker)
+            return;
+
+        var message = TransformSpeech(source, FormattedMessage.RemoveMarkup(originalMessage));
+
+        if (message.Length == 0)
+            return;
+
+        var speech = GetSpeechVerb(source, message);
+
+        // get the entity's apparent name (if no override provided).
+        string name;
+        if (nameOverride != null)
+        {
+            name = nameOverride;
+        }
+        else
+        {
+            var nameEv = new TransformSpeakerNameEvent(source, Name(source));
+            RaiseLocalEvent(source, nameEv);
+            name = nameEv.Name;
+            // Check for a speech verb override
+            if (nameEv.SpeechVerb != null && _prototypeManager.TryIndex<SpeechVerbPrototype>(nameEv.SpeechVerb, out var proto))
+                speech = proto;
+        }
+
+        name = FormattedMessage.EscapeText(name);
+
+        var wrappedMessage = Loc.GetString(speech.Bold ? "chat-manager-entity-say-bold-wrap-message" : "chat-manager-entity-say-wrap-message",
+            ("entityName", name),
+            ("verb", Loc.GetString(_random.Pick(speech.SpeechVerbStrings))),
+            ("fontType", speech.FontId),
+            ("fontSize", speech.FontSize),
+            ("message", FormattedMessage.EscapeText(message)));
+
+        SendInVoiceRange(ChatChannel.XenoHivemind, message, wrappedMessage, source, range);
+        TrySendInGameOOCMessage(source, message, InGameOOCChatType.HiveXeno, true);
+
+        var ev = new EntitySpokeEvent(source, message, null, null);
+        RaiseLocalEvent(source, ev, true);
+
+        // To avoid logging any messages sent by entities that are not players, like vendors, cloning, etc.
+        // Also doesn't log if hideLog is true.
+        if (!HasComp<ActorComponent>(source) || hideLog == true)
+            return;
+
+        if (originalMessage == message)
+        {
+            if (name != Name(source))
+                _adminLogger.Add(LogType.Chat, LogImpact.Low, $"AlienSay from {ToPrettyString(source):user} as {name}: {originalMessage}.");
+            else
+                _adminLogger.Add(LogType.Chat, LogImpact.Low, $"AlienSay from {ToPrettyString(source):user}: {originalMessage}.");
+        }
+        else
+        {
+            if (name != Name(source))
+                _adminLogger.Add(LogType.Chat, LogImpact.Low,
+                    $"AlienSay from {ToPrettyString(source):user} as {name}, original: {originalMessage}, transformed: {message}.");
+            else
+                _adminLogger.Add(LogType.Chat, LogImpact.Low,
+                    $"AlienSay from {ToPrettyString(source):user}, original: {originalMessage}, transformed: {message}.");
         }
     }
 
@@ -609,6 +724,34 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         _chatManager.ChatMessageToMany(ChatChannel.Dead, message, wrappedMessage, source, hideChat, true, clients.ToList(), author: player.UserId);
     }
+
+    private void SendXenoHivemindChat(EntityUid source, ICommonSession player, string message, bool hideChat)
+    {
+        var clients = GetXenoChatClients();
+        var playerName = Name(source);
+        var speech = GetSpeechVerb(source, message);
+        string wrappedMessage;
+        if (true)
+        {
+            wrappedMessage = Loc.GetString(speech.Bold ? "chat-manager-entity-say-bold-wrap-message" : "chat-manager-entity-say-wrap-message",
+                ("entityName", playerName),
+                ("verb", Loc.GetString(_random.Pick(speech.SpeechVerbStrings))),
+                ("fontType", speech.FontId),
+                ("fontSize", speech.FontSize),
+                ("message", FormattedMessage.EscapeText(message)));
+            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Xeno Hivemind chat from {player:Player}: {message}");
+        }
+        else
+        {
+            wrappedMessage = Loc.GetString("chat-manager-send-dead-chat-wrap-message",
+                ("deadChannelName", Loc.GetString("chat-manager-dead-channel-name")),
+                ("playerName", (playerName)),
+                ("message", FormattedMessage.EscapeText(message)));
+            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Dead chat from {player:Player}: {message}");
+        }
+
+        _chatManager.ChatMessageToMany(ChatChannel.XenoHivemind, message, wrappedMessage, source, hideChat, true, clients.ToList(), author: player.UserId);
+    }
     #endregion
 
     #region Utility
@@ -755,6 +898,15 @@ public sealed partial class ChatSystem : SharedChatSystem
             .Union(_adminManager.ActiveAdmins)
             .Select(p => p.Channel);
     }
+
+    private IEnumerable<INetChannel> GetXenoChatClients()
+    {
+        return Filter.Empty()
+            .AddWhereAttachedEntity(HasComp<GhostComponent>)
+            .Recipients
+            .Select(p => p.Channel);
+    }
+
 
     private string SanitizeMessagePeriod(string message)
     {
@@ -940,7 +1092,8 @@ public enum InGameICChatType : byte
 {
     Speak,
     Emote,
-    Whisper
+    Whisper,
+    Xeno
 }
 
 /// <summary>
@@ -949,7 +1102,8 @@ public enum InGameICChatType : byte
 public enum InGameOOCChatType : byte
 {
     Looc,
-    Dead
+    Dead,
+    HiveXeno
 }
 
 /// <summary>

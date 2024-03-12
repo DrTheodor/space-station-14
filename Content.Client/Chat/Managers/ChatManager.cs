@@ -35,6 +35,10 @@ namespace Content.Client.Chat.Managers
                     _consoleHost.ExecuteCommand($"looc \"{CommandParsing.Escape(str)}\"");
                     break;
 
+                case ChatSelectChannel.Xeno:
+                    _consoleHost.ExecuteCommand($"aliensay \"{CommandParsing.Escape(str)}\"");
+                    break;
+
                 case ChatSelectChannel.OOC:
                     _consoleHost.ExecuteCommand($"ooc \"{CommandParsing.Escape(str)}\"");
                     break;

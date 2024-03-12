@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using Content.Client.Administration.Managers;
+using Content.Client.Body.Systems;
 using Content.Client.Chat;
 using Content.Client.Chat.Managers;
 using Content.Client.Chat.TypingIndicator;
@@ -55,6 +56,7 @@ public sealed class ChatUIController : UIController
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IReplayRecordingManager _replayRecording = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly BodySystem _body = default!;
 
     [UISystemDependency] private readonly ExamineSystem? _examine = default;
     [UISystemDependency] private readonly GhostSystem? _ghost = default;
@@ -81,6 +83,7 @@ public sealed class ChatUIController : UIController
         {SharedChatSystem.RadioCommonPrefix, ChatSelectChannel.Radio},
         {SharedChatSystem.DeadPrefix, ChatSelectChannel.Dead},
         {SharedChatSystem.XenoHivemindPrefix, ChatSelectChannel.Xeno}
+
     };
 
     public static readonly Dictionary<ChatSelectChannel, char> ChannelPrefixes = new()
@@ -209,9 +212,6 @@ public sealed class ChatUIController : UIController
         _input.SetInputCommand(ContentKeyFunctions.FocusAdminChat,
             InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Admin)));
 
-        _input.SetInputCommand(ContentKeyFunctions.FocusXenoHivemindChat,
-            InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Xeno)));
-
         _input.SetInputCommand(ContentKeyFunctions.FocusRadio,
             InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Radio)));
 
@@ -220,6 +220,9 @@ public sealed class ChatUIController : UIController
 
         _input.SetInputCommand(ContentKeyFunctions.FocusConsoleChat,
             InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Console)));
+
+        _input.SetInputCommand(ContentKeyFunctions.FocusXenoHivemindChat,
+            InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Xeno)));
 
         _input.SetInputCommand(ContentKeyFunctions.CycleChatChannelForward,
             InputCmdHandler.FromDelegate(_ => CycleChatChannel(true)));
@@ -487,8 +490,6 @@ public sealed class ChatUIController : UIController
         FilterableChannels |= ChatChannel.OOC;
         FilterableChannels |= ChatChannel.LOOC;
 
-        CanSendChannels |= ChatSelectChannel.Xeno;
-        FilterableChannels |= ChatChannel.XenoHivemind;
         // can always hear server (nobody can actually send server messages).
         FilterableChannels |= ChatChannel.Server;
 
@@ -500,6 +501,12 @@ public sealed class ChatUIController : UIController
             FilterableChannels |= ChatChannel.Radio;
             FilterableChannels |= ChatChannel.Emotes;
             FilterableChannels |= ChatChannel.Notifications;
+
+            if (_body.GetBodyOrgans(_player.LocalEntity).ToArray().Contains("hivenode"))
+            {
+                CanSendChannels |= ChatSelectChannel.Xeno;
+                FilterableChannels |= ChatChannel.XenoHivemind;
+            }
 
             // Can only send local / radio / emote when attached to a non-ghost entity.
             // TODO: this logic is iffy (checking if controlling something that's NOT a ghost), is there a better way to check this?

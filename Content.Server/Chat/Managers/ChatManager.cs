@@ -378,6 +378,7 @@ namespace Content.Server.Chat.Managers
     public enum OOCChatType : byte
     {
         OOC,
-        Admin
+        Admin,
+        XenoHive
     }
 }

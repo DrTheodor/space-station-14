@@ -30,6 +30,7 @@
       sprite: Mobs/Species/Xeno/organs.rsi
       state: hivenode
     - type: Organ
+    - type: Hivenode
 
 - type: entity
   id: OrganXenoPlasmaVessel
@@ -62,3 +63,19 @@
     - type: Tag
       tags:
         - Meat
+
+- type: entity
+  id: TorsoXeno
+  name: "alien torso"
+  parent: [PartHuman, BaseTorso]
+  components:
+    - type: Sprite
+      sprite: Mobs/Species/Human/parts.rsi
+      state: "torso_m"
+    - type: Extractable
+      juiceSolution:
+        reagents:
+          - ReagentId: Fat
+            Quantity: 10
+          - ReagentId: Blood
+            Quantity: 20
