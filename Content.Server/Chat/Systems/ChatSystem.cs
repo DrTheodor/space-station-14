@@ -3,6 +3,8 @@ using System.Linq;
 using System.Text;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
+using Content.Server.Animals.Aliens.Components;
+using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
@@ -731,7 +733,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         var playerName = Name(source);
         var speech = GetSpeechVerb(source, message);
         string wrappedMessage;
-        if (true)
+        if (!HasComp<AlienQueenComponent>(source))
         {
             wrappedMessage = Loc.GetString(speech.Bold ? "chat-manager-entity-say-bold-wrap-message" : "chat-manager-entity-say-wrap-message",
                 ("entityName", playerName),
@@ -743,11 +745,13 @@ public sealed partial class ChatSystem : SharedChatSystem
         }
         else
         {
-            wrappedMessage = Loc.GetString("chat-manager-send-dead-chat-wrap-message",
-                ("deadChannelName", Loc.GetString("chat-manager-dead-channel-name")),
-                ("playerName", (playerName)),
+            wrappedMessage = Loc.GetString(speech.Bold ? "chat-manager-entity-say-bold-wrap-message" : "chat-manager-entity-say-wrap-message",
+                ("entityName", playerName),
+                ("verb", Loc.GetString(_random.Pick(speech.SpeechVerbStrings))),
+                ("fontType", speech.FontId),
+                ("fontSize", 25),
                 ("message", FormattedMessage.EscapeText(message)));
-            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Dead chat from {player:Player}: {message}");
+            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Xeno Hivemind chat from queen {player:Player}: {message}");
         }
 
         _chatManager.ChatMessageToMany(ChatChannel.XenoHivemind, message, wrappedMessage, source, hideChat, true, clients.ToList(), author: player.UserId);
@@ -902,7 +906,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     private IEnumerable<INetChannel> GetXenoChatClients()
     {
         return Filter.Empty()
-            .AddWhereAttachedEntity(HasComp<GhostComponent>)
+            .AddWhereAttachedEntity(HasComp<AlienComponent>)
             .Recipients
             .Select(p => p.Channel);
     }

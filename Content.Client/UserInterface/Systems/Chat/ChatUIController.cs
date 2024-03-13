@@ -14,6 +14,7 @@ using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Chat.Widgets;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Shared.Administration;
+using Content.Shared.Body.Organ;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Decals;
@@ -56,7 +57,6 @@ public sealed class ChatUIController : UIController
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IReplayRecordingManager _replayRecording = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly BodySystem _body = default!;
 
     [UISystemDependency] private readonly ExamineSystem? _examine = default;
     [UISystemDependency] private readonly GhostSystem? _ghost = default;
@@ -502,11 +502,8 @@ public sealed class ChatUIController : UIController
             FilterableChannels |= ChatChannel.Emotes;
             FilterableChannels |= ChatChannel.Notifications;
 
-            if (_body.GetBodyOrgans(_player.LocalEntity).ToArray().Contains("hivenode"))
-            {
-                CanSendChannels |= ChatSelectChannel.Xeno;
-                FilterableChannels |= ChatChannel.XenoHivemind;
-            }
+            CanSendChannels |= ChatSelectChannel.Xeno;
+            FilterableChannels |= ChatChannel.XenoHivemind;
 
             // Can only send local / radio / emote when attached to a non-ghost entity.
             // TODO: this logic is iffy (checking if controlling something that's NOT a ghost), is there a better way to check this?

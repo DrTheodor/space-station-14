@@ -19,7 +19,6 @@
         - left_leg
       organs:
         heart: OrganHumanHeart
-        lungs: OrganHumanLungs
         stomach: OrganHumanStomach
         liver: OrganHumanLiver
         kidneys: OrganHumanKidneys
