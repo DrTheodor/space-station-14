@@ -1,0 +1,12 @@
+﻿# Base actions
+#- type: entity
+#  id: ActionToggleLightingAlien
+#  name: Toggle All Lighting
+#  description: Toggle all light rendering to better observe dark areas.
+#  noSpawn: true
+#  components:
+#    - type: InstantAction
+#      icon: Interface/VerbIcons/light.svg.192dpi.png
+#      clientExclusive: true
+#      checkCanInteract: false
+#      event: !type:ToggleLightingAlienActionEvent

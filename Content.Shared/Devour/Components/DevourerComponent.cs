@@ -59,6 +59,13 @@ public sealed partial class DevourerComponent : Component
         }
     };
 
+    [ViewVariables(VVAccess.ReadWrite), DataField("consumes")]
+    public string[] Consumes = new[]
+    {
+        "Critical",
+        "Dead"
+    };
+
     /// <summary>
     /// The chemical ID injected upon devouring
     /// </summary>

@@ -164,3 +164,28 @@
     revertOnDeath: true
     revertOnCrit: true
     duration: 20
+
+# Alien evolutions
+
+#Lavras
+- type: polymorph
+  id: AlienLavraGrowStageTwo
+  configuration:
+    entity: MobAlienLarvaGrowStageTwo
+    forced: true
+    transferName: true
+    transferHumanoidAppearance: false
+    inventory: None
+    revertOnDeath: false
+    revertOnCrit: false
+
+- type: polymorph
+  id: AlienLavraGrowStageThree
+  configuration:
+    entity: MobAlienLarvaGrowStageThree
+    forced: true
+    transferName: true
+    transferHumanoidAppearance: false
+    inventory: None
+    revertOnDeath: false
+    revertOnCrit: false

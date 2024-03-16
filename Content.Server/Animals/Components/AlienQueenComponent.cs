@@ -1,4 +1,4 @@
-﻿namespace Content.Server.Animals.Aliens.Components;
+﻿namespace Content.Server.Animals.Components;
 
 /// <summary>
 /// This is used for...
@@ -6,5 +6,5 @@
 [RegisterComponent]
 public sealed partial class AlienQueenComponent : Component
 {
-    
+
 }
