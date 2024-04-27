@@ -3,6 +3,7 @@ using Content.Shared.Alert;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Buckle.Components;
@@ -118,6 +119,20 @@ public sealed partial class StrapComponent : Component
     [AutoNetworkedField]
     [ViewVariables]
     public int OccupiedSize;
+
+    /// <summary>
+    /// Should the DoAfter process start on unbuckling?
+    /// </summary>
+    [DataField]
+    [ViewVariables(VVAccess.ReadWrite)]
+    public bool DoAfterOnUnbuckle = false;
+
+    /// <summary>
+    /// Length of unbuckling process
+    /// </summary>
+    [DataField]
+    [ViewVariables(VVAccess.ReadWrite)]
+    public float UnbucklingLength = 3f;
 }
 
 public enum StrapPosition

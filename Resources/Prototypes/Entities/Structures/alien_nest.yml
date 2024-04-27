@@ -1,0 +1,64 @@
+﻿- type: entity
+  id: AlienNest
+  parent: BaseStructure
+  name: alien-nest-name
+  description: alien-nest-desc
+  components:
+    - type: Sprite
+      sprite: Structures/alien_nest.rsi
+      drawdepth: FloorTiles
+    - type: Icon
+      sprite: Structures/alien_nest.rsi
+      state: full
+    - type: IconSmooth
+      key: alien_nest
+      base: alien_nest
+    - type: Tag
+      tags: [ Carpet ]
+    - type: Physics
+      canCollide: false
+    - type: Fixtures
+    - type: Damageable
+      damageContainer: Inorganic
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 10
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: Strap
+      position: Down
+      rotation: -90
+      doAfterOnUnbuckle: true
+      unbucklingProcess: 3.0
+
+- type: entity
+  name: alien-nest-ties
+  description: alien-nest-ties-desc
+  id: AlienNestTies
+  parent: Handcuffs
+  components:
+    - type: Item
+      size: Tiny
+      storedRotation: 0
+    - type: Handcuff
+      cuffTime: 0
+      breakoutTime: 3
+      cuffedRSI: Mobs/Aliens/Xenos/alien.rsi  # cablecuffs will look fine
+      bodyIconState: nestoverlay
+      breakOnRemove: true
+      startCuffSound:
+        path: /Audio/Effects/Fluids/blood1.ogg
+      endCuffSound:
+        path: /Audio/Effects/gib1.ogg
+      startUncuffSound:
+        path: /Audio/Effects/Fluids/blood1.ogg
+      endUncuffSound:
+        path: /Audio/Effects/gib1.ogg
+      startBreakoutSound:
+        path: /Audio/Effects/Fluids/blood1.ogg
+    - type: Sprite
+      sprite: Mobs/Aliens/Xenos/alien.rsi
+      state: nestoverlay

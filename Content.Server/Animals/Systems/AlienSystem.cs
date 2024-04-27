@@ -9,6 +9,7 @@ using Content.Shared.Item;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Tag;
+using AlienComponent = Content.Shared.Aliens.Components.AlienComponent;
 
 namespace Content.Server.Animals.Systems;
 

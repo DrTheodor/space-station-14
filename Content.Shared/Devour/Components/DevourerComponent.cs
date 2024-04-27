@@ -1,4 +1,5 @@
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.Mobs;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.Containers;
@@ -60,10 +61,10 @@ public sealed partial class DevourerComponent : Component
     };
 
     [ViewVariables(VVAccess.ReadWrite), DataField("consumes")]
-    public string[] Consumes = new[]
+    public HashSet<MobState> Consumes = new()
     {
-        "Critical",
-        "Dead"
+        MobState.Critical,
+        MobState.Dead
     };
 
     /// <summary>

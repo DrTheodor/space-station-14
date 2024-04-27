@@ -3,6 +3,7 @@ using Content.Server.Body.Components;
 using Content.Server.Popups;
 using Content.Shared.Aliens;
 using Content.Shared.Body.Part;
+using AlienComponent = Content.Shared.Aliens.Components.AlienComponent;
 
 namespace Content.Server.Body.Systems;
 

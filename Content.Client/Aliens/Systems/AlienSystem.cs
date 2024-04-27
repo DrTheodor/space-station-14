@@ -1,11 +1,7 @@
 ﻿using Content.Client.Movement.Systems;
-using Content.Shared.Aliens;
-using Content.Shared.Devour;
-using Content.Shared.Ghost;
-using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
+using ToggleLightingAlienActionEvent = Content.Shared.Aliens.Components.ToggleLightingAlienActionEvent;
 
-namespace Content.Client.Aliens;
+namespace Content.Client.Aliens.Systems;
 
 /// <summary>
 /// This handles...
@@ -20,12 +16,6 @@ public sealed class AlienSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<EyeComponent, ToggleLightingAlienActionEvent>(OnToggleLighting);
-        SubscribeLocalEvent<AlienComponent, DevourActionEvent>(OnDevour);
-    }
-
-    private void OnDevour(EntityUid uid, AlienComponent component, DevourActionEvent args)
-    {
-
     }
 
     private void OnToggleLighting(EntityUid uid, EyeComponent component, ToggleLightingAlienActionEvent args)

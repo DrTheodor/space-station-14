@@ -19,7 +19,7 @@
         - left_leg
       organs:
         heart: OrganHumanHeart
-        stomach: OrganHumanStomach
+        stomach: OrganAnimalStomach
         liver: OrganHumanLiver
         kidneys: OrganHumanKidneys
         plasmaVessel: OrganXenoPlasmaVessel

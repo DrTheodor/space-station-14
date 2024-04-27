@@ -375,6 +375,10 @@
       activatedSize: Huge
     - type: ItemToggleDisarmMalus
       activatedDisarmMalus: 0.6
+    - type: MobThresholds
+      thresholds:
+        0: Alive
+        1500: Dead
     - type: Sprite
       sprite: Objects/Weapons/Melee/e_shield.rsi
       layers:

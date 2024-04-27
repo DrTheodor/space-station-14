@@ -1,169 +1,178 @@
-﻿- type: entity
-  name: alien-larva-name
-  parent: SimpleSpaceMobBase
-  id: MobAlienLarva
-  description: alien-larva-desc
-  components:
-    - type: Body
-      prototype: Xeno
-    - type: GhostRole
-      makeSentient: true
-      allowSpeech: true
-      allowMovement: true
-      name: ghost-role-information-alien-larva-name
-      description: ghost-role-information-alien-larva-description
-    - type: GhostTakeoverAvailable
-    - type: Speech
-      speechSounds: Vox
-      speechVerb: SmallMob
-    - type: Sprite
-      drawdepth: SmallMobs
-      sprite: Mobs/Aliens/Xenos/alien.rsi
-      layers:
-        - map: ["enum.DamageStateVisualLayers.Base", "movement"]
-          state: larva0
-    - type: SpriteMovement
-      movementLayers:
-        movement:
-          state: larva0
-      noMovementLayers:
-        movement:
-          state: larva0
-    - type: NpcFactionMember
-      factions:
-        - Xeno
-    - type: HTN
-      rootTask:
-        task: MouseCompound
-    - type: Physics
-    - type: Fixtures
-      fixtures:
-        fix1:
-          shape:
-            !type:PhysShapeCircle
-            radius: 0.2
-          density: 100
-          mask:
-            - SmallMobMask
-          layer:
-            - SmallMobLayer
-    - type: MobState
-    - type: Deathgasp
-    - type: MobStateActions
-      actions:
-        Critical:
-          - ActionCritSuccumb
-          - ActionCritFakeDeath
-          - ActionCritLastWords
-    - type: MobThresholds
-      thresholds:
-        0: Alive
-        25: Dead
-    - type: MovementSpeedModifier
-      baseWalkSpeed : 5
-      baseSprintSpeed : 5
-    - type: DamageStateVisuals
-      states:
-        Alive:
-          Base: larva0
-        Critical:
-          Base: larva0_stun
-        Dead:
-          Base: larva0_dead
-    - type: Tag
-      tags:
-        - Trash
-        - VimPilot
-        - Meat
-    - type: Vocal
-      sounds:
-        Male: Mouse
-        Female: Mouse
-        Unsexed: Mouse
-      wilhelmProbability: 0.001
-    - type: CombatMode
-    - type: MeleeWeapon
-      soundHit:
-        path: /Audio/Weapons/Xeno/alien_claw_flesh1.ogg
-      angle: 0
-      animation: WeaponArcBite
-      damage:
-        types:
-          Blunt: 2
-    - type: Bloodstream
-      bloodMaxVolume: 50
-      bloodReagent: FluorosulfuricAcid
-    - type: MobPrice
-      price: 50
-    - type: BadFood
-    - type: NonSpreaderZombie
-    - type: PreventSpiller
-    - type: Alien
-    - type: TimedPolymorph
-      entityPrototype: MobAlienLarvaGrowStageTwo
-      polymorphTime: 5
+﻿#- type: entity
+#  name: alien-larva-name
+#  parent: SimpleSpaceMobBase
+#  id: MobAlienLarva
+#  description: alien-larva-desc
+#  components:
+#    - type: Body
+#      prototype: Xeno
+#    - type: GhostRole
+#      makeSentient: true
+#      allowSpeech: true
+#      allowMovement: true
+#      name: ghost-role-information-alien-larva-name
+#      description: ghost-role-information-alien-larva-description
+#    - type: GhostTakeoverAvailable
+#    - type: Speech
+#      speechSounds: Vox
+#      speechVerb: SmallMob
+#    - type: Sprite
+#      drawdepth: SmallMobs
+#      sprite: Mobs/Aliens/Xenos/alien.rsi
+#      layers:
+#        - map: ["enum.DamageStateVisualLayers.Base", "movement"]
+#          state: larva0
+#        - map: [ "enum.HumanoidVisualLayers.Handcuffs" ]
+#          color: "#ffffff"
+#          sprite: Mobs/Aliens/Xenos/alien.rsi
+#          state: larva0_cuff
+#          visible: false
+#    - type: SpriteMovement
+#      movementLayers:
+#        movement:
+#          state: larva0
+#      noMovementLayers:
+#        movement:
+#          state: larva0
+#    - type: NpcFactionMember
+#      factions:
+#        - Xeno
+#    - type: HTN
+#      rootTask:
+#        task: MouseCompound
+#    - type: Physics
+#    - type: Fixtures
+#      fixtures:
+#        fix1:
+#          shape:
+#            !type:PhysShapeCircle
+#            radius: 0.2
+#          density: 100
+#          mask:
+#            - SmallMobMask
+#          layer:
+#            - SmallMobLayer
+#    - type: MobState
+#    - type: Deathgasp
+#    - type: MobStateActions
+#      actions:
+#        Critical:
+#          - ActionCritSuccumb
+#          - ActionCritFakeDeath
+#          - ActionCritLastWords
+#    - type: MobThresholds
+#      thresholds:
+#        0: Alive
+#        25: Dead
+#    - type: MovementSpeedModifier
+#      baseWalkSpeed : 5
+#      baseSprintSpeed : 5
+#    - type: DamageStateVisuals
+#      states:
+#        Alive:
+#          Base: larva0
+#        Critical:
+#          Base: larva0_stun
+#        Dead:
+#          Base: larva0_dead
+#    - type: Tag
+#      tags:
+#        - Trash
+#        - VimPilot
+#        - Meat
+#    - type: Vocal
+#      sounds:
+#        Male: Mouse
+#        Female: Mouse
+#        Unsexed: Mouse
+#      wilhelmProbability: 0.001
+#    - type: CombatMode
+#    - type: MeleeWeapon
+#      soundHit:
+#        path: /Audio/Weapons/Xeno/alien_claw_flesh1.ogg
+#      angle: 0
+#      animation: WeaponArcBite
+#      damage:
+#        types:
+#          Blunt: 2
+#    - type: Bloodstream
+#      bloodMaxVolume: 50
+#      bloodReagent: FluorosulfuricAcid
+#    - type: MobPrice
+#      price: 50
+#    - type: BadFood
+#    - type: NonSpreaderZombie
+#    - type: PreventSpiller
+#    - type: Alien
+#    - type: TimedPolymorph
+#      entityPrototype: MobAlienLarvaGrowStageTwo
+#      polymorphTime: 5
+#    - type: Cuffable
+#    - type: Ensnareable
+#      sprite: Objects/Misc/ensnare.rsi
+#      state: icon
+#
+#- type: entity
+#  parent: MobAlienLarva
+#  id: MobAlienLarvaGrowStageTwo
+#  components:
+#    - type: Sprite
+#      drawdepth: SmallMobs
+#      sprite: Mobs/Aliens/Xenos/alien.rsi
+#      layers:
+#        - map: [ "enum.DamageStateVisualLayers.Base", "movement" ]
+#          state: larva1
+#    - type: SpriteMovement
+#      movementLayers:
+#        movement:
+#          state: larva1
+#      noMovementLayers:
+#        movement:
+#          state: larva1
+#    - type: DamageStateVisuals
+#      states:
+#        Alive:
+#          Base: larva1
+#        Critical:
+#          Base: larva1_stun
+#        Dead:
+#          Base: larva1_dead
+#    - type: TimedPolymorph
+#      entityPrototype: MobAlienLarvaGrowStageThree
+#      polymorphTime: 5
+#    - type: TimedDespawn
+#      lifetime: 5
+#
+#- type: entity
+#  parent: MobAlienLarva
+#  id: MobAlienLarvaGrowStageThree
+#  components:
+#    - type: Sprite
+#      drawdepth: SmallMobs
+#      sprite: Mobs/Aliens/Xenos/alien.rsi
+#      layers:
+#        - map: [ "enum.DamageStateVisualLayers.Base", "movement" ]
+#          state: larva2
+#    - type: SpriteMovement
+#      movementLayers:
+#        movement:
+#          state: larva2
+#      noMovementLayers:
+#        movement:
+#          state: larva2
+#    - type: DamageStateVisuals
+#      states:
+#        Alive:
+#          Base: larva2
+#        Critical:
+#          Base: larva2_stun
+#        Dead:
+#          Base: larva2_dead
 
-- type: entity
-  parent: MobAlienLarva
-  id: MobAlienLarvaGrowStageTwo
-  components:
-    - type: Sprite
-      drawdepth: SmallMobs
-      sprite: Mobs/Aliens/Xenos/alien.rsi
-      layers:
-        - map: [ "enum.DamageStateVisualLayers.Base", "movement" ]
-          state: larva1
-    - type: SpriteMovement
-      movementLayers:
-        movement:
-          state: larva1
-      noMovementLayers:
-        movement:
-          state: larva1
-    - type: DamageStateVisuals
-      states:
-        Alive:
-          Base: larva1
-        Critical:
-          Base: larva1_stun
-        Dead:
-          Base: larva1_dead
-    - type: TimedPolymorph
-      entityPrototype: MobAlienLarvaGrowStageThree
-      polymorphTime: 5
-    - type: TimedDespawn
-      lifetime: 5
-
-- type: entity
-  parent: MobAlienLarva
-  id: MobAlienLarvaGrowStageThree
-  components:
-    - type: Sprite
-      drawdepth: SmallMobs
-      sprite: Mobs/Aliens/Xenos/alien.rsi
-      layers:
-        - map: [ "enum.DamageStateVisualLayers.Base", "movement" ]
-          state: larva2
-    - type: SpriteMovement
-      movementLayers:
-        movement:
-          state: larva2
-      noMovementLayers:
-        movement:
-          state: larva2
-    - type: DamageStateVisuals
-      states:
-        Alive:
-          Base: larva2
-        Critical:
-          Base: larva2_stun
-        Dead:
-          Base: larva2_dead
-
-# Hacky for the stress test so don't even consider adding to this
 - type: entity
   name: mob-alien-drone-name
-  id: MobAlienDrone
+  suffix: Base
+  id: MobAlienBase
   parent: SimpleSpaceMobBase
   description: They mostly come at night. Mostly.
   components:
@@ -211,6 +220,17 @@
       layers:
         - map: ["enum.DamageStateVisualLayers.Base"]
           state: aliend
+        - map: [ "pocket1" ]
+        - map: [ "pocket2" ]
+        - map: [ "enum.HumanoidVisualLayers.Handcuffs" ]
+          color: "#ffffff"
+          sprite: Mobs/Aliens/Xenos/alien.rsi
+          state: aliencuff
+          visible: false
+        - map: [ "clownedon" ] # Dynamically generated
+          sprite: "Effects/creampie.rsi"
+          state: "creampie_human"
+          visible: false
     - type: Fixtures
       fixtures:
         fix1:
@@ -260,7 +280,7 @@
           Base: aliend_dead
     - type: Puller
     - type: Butcherable
-      butcheringType: Spike
+      butcheringType: knife
       spawned:
         - id: FoodMeatXeno
           amount: 5
@@ -289,11 +309,14 @@
     - type: Speech
       speechVerb: LargeMob
     - type: Alien
-
     - type: Body
       prototype: Xeno
     - type: Inventory
       templateId: alien
+    - type: Cuffable
+    - type: Ensnareable
+      sprite: Objects/Misc/ensnare.rsi
+      state: icon
     - type: InventorySlots
     - type: StatusEffects
       allowed:
@@ -307,8 +330,8 @@
         - Pacified
         - StaminaModifier
     - type: Devourer
-      foodPreference: Humanoid
       shouldStoreDevoured: true
+      foodPreference: Humanoid
       chemical: UncookedAnimalProteins
       healRate: 5.0
       whitelist:
@@ -318,3 +341,21 @@
         - Alive
         - Critical
         - Dead
+    - type: VomitAction
+      thirstAdded: 5.0
+      hungerAdded: 5.0
+    - type: PlasmaVessel
+    - type: Alerts
+
+- type: entity
+  name: mob-alien-drone-name
+  id: MobAlienDrone
+  suffix: Drone
+  parent: MobAlienBase
+  components:
+    - type: AcidMaker
+      action: ActionMakeAcid
+      productionLength: 0
+      entityProduced: AlienAcid
+    - type: AlienDrone
+

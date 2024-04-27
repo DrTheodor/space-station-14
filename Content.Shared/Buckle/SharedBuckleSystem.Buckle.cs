@@ -1,9 +1,13 @@
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared.Alert;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Buckle.Components;
+using Content.Shared.Cuffs;
+using Content.Shared.Cuffs.Components;
 using Content.Shared.Database;
+using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
@@ -19,12 +23,14 @@ using Content.Shared.Throwing;
 using Content.Shared.Verbs;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
+using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Buckle;
 
 public abstract partial class SharedBuckleSystem
 {
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     private void InitializeBuckle()
     {
         SubscribeLocalEvent<BuckleComponent, ComponentStartup>(OnBuckleComponentStartup);
@@ -40,6 +46,7 @@ public abstract partial class SharedBuckleSystem
         SubscribeLocalEvent<BuckleComponent, ThrowPushbackAttemptEvent>(OnBuckleThrowPushbackAttempt);
         SubscribeLocalEvent<BuckleComponent, UpdateCanMoveEvent>(OnBuckleUpdateCanMove);
         SubscribeLocalEvent<BuckleComponent, ChangeDirectionAttemptEvent>(OnBuckleChangeDirectionAttempt);
+        SubscribeLocalEvent<BuckleComponent, DoAfterAttemptEvent<UnbucklingDoAfterEvent>>(OnUnbucklingDoAfter);
     }
 
     private void OnBuckleComponentStartup(EntityUid uid, BuckleComponent component, ComponentStartup args)
@@ -403,6 +410,11 @@ public abstract partial class SharedBuckleSystem
     /// </returns>
     public bool TryUnbuckle(EntityUid buckleUid, EntityUid userUid, bool force = false, BuckleComponent? buckleComp = null)
     {
+        if (buckleComp == null)
+        {
+            return false;
+        }
+        var strapComponent = CompOrNull<StrapComponent>(buckleComp.BuckledTo);
         if (!Resolve(buckleUid, ref buckleComp, false) ||
             buckleComp.BuckledTo is not { } strapUid)
             return false;
@@ -428,6 +440,29 @@ public abstract partial class SharedBuckleSystem
             if (_mobState.IsIncapacitated(buckleUid) && userUid == buckleUid)
                 return false;
         }
+        var doAfter = new DoAfterArgs(EntityManager, buckleUid, strapComponent!.UnbucklingLength, new UnbucklingDoAfterEvent(), buckleUid)
+        {
+            BreakOnDamage = true,
+            BreakOnTargetMove = true,
+            BreakOnUserMove = true,
+            NeedHand = true
+        };
+        if (strapComponent.DoAfterOnUnbuckle)
+        {
+            return _doAfter.TryStartDoAfter(doAfter);
+        }
+
+        return Unbuckle(buckleUid, userUid, strapUid, force, buckleComp);
+
+    }
+
+    private void OnUnbucklingDoAfter(EntityUid uid, BuckleComponent component, DoAfterAttemptEvent<UnbucklingDoAfterEvent> args)
+    {
+        Unbuckle(uid,uid, component.BuckledTo!.Value);
+    }
+
+    private bool Unbuckle(EntityUid buckleUid, EntityUid userUid, EntityUid strapUid, bool force = false, BuckleComponent? buckleComp = null)
+    {
 
         // Logging
         if (userUid != buckleUid)
@@ -435,7 +470,7 @@ public abstract partial class SharedBuckleSystem
         else
             _adminLogger.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(userUid):player} unbuckled themselves from {ToPrettyString(strapUid)}");
 
-        SetBuckledTo(buckleUid, null, null, buckleComp);
+        SetBuckledTo(buckleUid, strapUid, null, buckleComp!);
 
         if (!TryComp<StrapComponent>(strapUid, out var strapComp))
             return false;
@@ -475,7 +510,7 @@ public abstract partial class SharedBuckleSystem
         }
         if (strapComp.BuckledEntities.Remove(buckleUid))
         {
-            strapComp.OccupiedSize -= buckleComp.Size;
+            strapComp.OccupiedSize -= buckleComp!.Size;
             //Dirty(strapUid);
             Dirty(strapComp);
         }
@@ -530,4 +565,9 @@ public abstract partial class SharedBuckleSystem
         }
 
     }
+}
+
+[Serializable, NetSerializable]
+public sealed partial class UnbucklingDoAfterEvent : SimpleDoAfterEvent
+{
 }

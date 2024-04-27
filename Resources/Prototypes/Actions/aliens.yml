@@ -10,3 +10,51 @@
 #      clientExclusive: true
 #      checkCanInteract: false
 #      event: !type:ToggleLightingAlienActionEvent
+
+- type: entity
+  id: ActionVomit
+  name: action-vomit-name
+  description: action-vomit-desc
+  noSpawn: true
+  components:
+    - type: InstantAction
+      icon: { sprite : Fluids/vomit.rsi, state: vomit-0 }
+      checkCanInteract: false
+      event: !type:VomitActionEvent
+
+- type: entity
+  id: ActionMakeAcid
+  name: action-make-acid-name
+  description: action-make-acid-desc
+  noSpawn: true
+  components:
+    - type: InstantAction
+      icon: { sprite : Mobs/Aliens/Xenos/alien.rsi, state: acid }
+      event: !type:AcidMakeActionEvent
+      useDelay: 1
+
+# Drone
+
+- type: entity
+  id: ActionAlienDroneWall
+  name: action-create-resin-wall-name
+  description: action-create-resin-wall-desc
+  noSpawn: true
+  components:
+    - type: InstantAction
+      priority: -1
+      useDelay: 1
+      icon: { sprite: Structures/Walls/resin.rsi, state: full }
+      event: !type:ResinWallActionEvent
+
+- type: entity
+  id: ActionWindowResin
+  name: action-create-resin-window-name
+  description: action-create-resin-window-desc
+  noSpawn: true
+  components:
+    - type: InstantAction
+      priority: -1
+      useDelay: 1
+      icon: { sprite : Structures/Windows/resin_membrane.rsi, state: full }
+      event: !type:ResinWindowActionEvent

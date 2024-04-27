@@ -51,7 +51,7 @@ public abstract class SharedDevourSystem : EntitySystem
         // Structure and mob devours handled differently.
         if (TryComp(target, out MobStateComponent? targetState))
         {
-            if (component.Consumes.Contains(nameof(targetState.CurrentState)))
+            if (component.Consumes.Contains(targetState.CurrentState))
             {
                 _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, uid, component.DevourTime, new DevourDoAfterEvent(), uid, target: target, used: uid)
                 {
