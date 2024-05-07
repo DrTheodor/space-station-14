@@ -16,7 +16,7 @@ namespace Content.Server.Aliens.Systems;
 /// <summary>
 /// This handles...
 /// </summary>
-public sealed class AlienDroneSystem : EntitySystem
+public sealed class ResinSpinnerSystem : EntitySystem
 {
     /// <inheritdoc/>
     [Dependency] private readonly PopupSystem _popupSystem = default!;
@@ -30,11 +30,11 @@ public sealed class AlienDroneSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<AlienDroneComponent, ResinWallDoAfterEvent>(OnWallDoAfter);
-        SubscribeLocalEvent<AlienDroneComponent, ResinWindowDoAfterEvent>(OnWindowDoAfter);
+        SubscribeLocalEvent<ResinSpinnerComponent, ResinWallDoAfterEvent>(OnWallDoAfter);
+        SubscribeLocalEvent<ResinSpinnerComponent, ResinWindowDoAfterEvent>(OnWindowDoAfter);
     }
 
-    private void OnWallDoAfter(EntityUid uid, AlienDroneComponent component, ResinWallDoAfterEvent args)
+    private void OnWallDoAfter(EntityUid uid, ResinSpinnerComponent component, ResinWallDoAfterEvent args)
     {
         if (args.Cancelled || args.Handled || component.Deleted)
             return;
@@ -43,7 +43,7 @@ public sealed class AlienDroneSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void OnWindowDoAfter(EntityUid uid, AlienDroneComponent component, ResinWindowDoAfterEvent args)
+    private void OnWindowDoAfter(EntityUid uid, ResinSpinnerComponent component, ResinWindowDoAfterEvent args)
     {
         if (args.Cancelled || args.Handled || component.Deleted)
             return;
@@ -52,14 +52,14 @@ public sealed class AlienDroneSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void CreateStructure(EntityUid uid, AlienDroneComponent component, string structurePrototype)
+    public void CreateStructure(EntityUid uid, ResinSpinnerComponent component, string structurePrototype)
     {
 
         if (_container.IsEntityOrParentInContainer(uid))
             return;
 
         var xform = Transform(uid);
-        // Get the tile in front of the mime
+        // Get the tile in front of the drone
         var offsetValue = xform.LocalRotation.ToWorldVec();
         var coords = xform.Coordinates.Offset(offsetValue).SnapToGrid(EntityManager, _mapMan);
         var tile = coords.GetTileRef(EntityManager, _mapMan);

@@ -19,9 +19,30 @@ public sealed partial class AlienComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? ToggleLightingActionEntity;
 
-        [DataField("devourAction", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    [DataField("devourAction", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string? DevourAction = "ActionDevour";
+
+    /// <summary>
+    /// This will subtract (not add, don't get this mixed up) from the current plasma of the mob making node.
+    /// </summary>
+    [DataField("plasmaCostNode")]
+    [ViewVariables(VVAccess.ReadWrite)]
+    [AutoNetworkedField]
+    public float PlasmaCostNode = 50f;
+
+    /// <summary>
+    /// The node prototype to use.
+    /// </summary>
+    [DataField("nodePrototype", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    public string WeednodePrototype = "AlienWeednode";
+
+    [DataField("nodeAction", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
+    public string? WeednodeAction = "ActionAlienNode";
+
+    [DataField("nodeActionEntity")] public EntityUid? WeednodeActionEntity;
 
 }
 
 public sealed partial class ToggleLightingAlienActionEvent : InstantActionEvent { }
+
+public sealed partial class WeednodeActionEvent : InstantActionEvent { }

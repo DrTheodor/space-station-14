@@ -755,8 +755,8 @@ public sealed partial class ChatSystem : SharedChatSystem
                 ("message", FormattedMessage.EscapeText(message)));
             _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Xeno Hivemind chat from queen {player:Player}: {message}");
         }
-
-        _chatManager.ChatMessageToMany(ChatChannel.XenoHivemind, message, wrappedMessage, source, hideChat, true, clients.ToList(), author: player.UserId);
+        if (HasComp<AlienComponent>(source))
+            _chatManager.ChatMessageToMany(ChatChannel.XenoHivemind, message, wrappedMessage, source, hideChat, true, clients.ToList(), author: player.UserId);
     }
     #endregion
 

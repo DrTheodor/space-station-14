@@ -13,7 +13,7 @@ namespace Content.Shared.Aliens.Systems;
 /// <summary>
 /// This handles...
 /// </summary>.
-public sealed class SharedAlienDroneSystem : EntitySystem
+public sealed class SharedResinSpinnerSystem : EntitySystem
 {
     /// <inheritdoc/>
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
@@ -23,29 +23,29 @@ public sealed class SharedAlienDroneSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<AlienDroneComponent, ComponentInit>(OnComponentInit);
+        SubscribeLocalEvent<ResinSpinnerComponent, ComponentInit>(OnComponentInit);
 
-        SubscribeLocalEvent<AlienDroneComponent, ResinWallActionEvent>(OnWall);
-        SubscribeLocalEvent<AlienDroneComponent, ResinWindowActionEvent>(OnWindow);
+        SubscribeLocalEvent<ResinSpinnerComponent, ResinWallActionEvent>(OnWall);
+        SubscribeLocalEvent<ResinSpinnerComponent, ResinWindowActionEvent>(OnWindow);
     }
 
-    private void OnComponentInit(EntityUid uid, AlienDroneComponent component, ComponentInit args)
+    private void OnComponentInit(EntityUid uid, ResinSpinnerComponent component, ComponentInit args)
     {
         _actionsSystem.AddAction(uid, ref component.ResinWallActionEntity, component.ResinWallAction, uid);
         _actionsSystem.AddAction(uid, ref component.ResinWindowActionEntity, component.ResinWindowAction, uid);
     }
 
-    private void OnWall(EntityUid uid, AlienDroneComponent component, ResinWallActionEvent args)
+    private void OnWall(EntityUid uid, ResinSpinnerComponent component, ResinWallActionEvent args)
     {
         OnStructureMaking(uid, component.PlasmaCostWall, component.ProductionLengthWall, component, new ResinWallDoAfterEvent());
     }
 
-    private void OnWindow(EntityUid uid, AlienDroneComponent component, ResinWindowActionEvent args)
+    private void OnWindow(EntityUid uid, ResinSpinnerComponent component, ResinWindowActionEvent args)
     {
         OnStructureMaking(uid, component.PlasmaCostWindow, component.ProductionLengthWindow, component, new ResinWindowDoAfterEvent());
     }
 
-    private void OnStructureMaking(EntityUid uid, float cost, float productionLength, AlienDroneComponent component, DoAfterEvent doAfterEvent)
+    private void OnStructureMaking(EntityUid uid, float cost, float productionLength, ResinSpinnerComponent component, DoAfterEvent doAfterEvent)
     {
         if (TryComp<PlasmaVesselComponent>(uid, out var plasmaComp)
             && plasmaComp.Plasma < cost)
@@ -56,10 +56,10 @@ public sealed class SharedAlienDroneSystem : EntitySystem
 
         var doAfter = new DoAfterArgs(EntityManager, uid, productionLength, doAfterEvent, uid)
         { // I'm not sure if more things should be put here, but imo ideally it should probably be set in the component/YAML. Not sure if this is currently possible.
-            BreakOnUserMove = true,
             BlockDuplicate = true,
             BreakOnDamage = true,
             CancelDuplicate = true,
+            BreakOnMove = true
         };
 
         _doAfterSystem.TryStartDoAfter(doAfter);

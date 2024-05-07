@@ -44,6 +44,13 @@ public sealed partial class TimedSpawnerComponent : Component, ISerializationHoo
     [DataField]
     public int MaximumEntitiesSpawned = 1;
 
+    /// <summary>
+    /// Offset of entity spawned
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
+    public float Offset;
+
     public CancellationTokenSource? TokenSource;
 
     void ISerializationHooks.AfterDeserialization()

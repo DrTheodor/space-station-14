@@ -1,4 +1,5 @@
-﻿using Content.Shared.Polymorph;
+﻿using System.Threading;
+using Content.Shared.Polymorph;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
@@ -12,14 +13,16 @@ namespace Content.Server.Polymorph.Components;
 public sealed partial class TimedPolymorphComponent : Component
 {
     [DataField(required: true)]
-    public EntProtoId EntityPrototype = default!;
+    public ProtoId<PolymorphPrototype> PolymorphPrototype;
 
     [DataField]
     public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/Magic/forcewall.ogg");
 
-    [DataField(required: true)]
-    public float PolymorphTime;
+    [DataField]
+    public float PolymorphTime = 5f;
 
-    [ByRefEvent]
-    public readonly record struct TimedPolymorphEvent;
+    [DataField]
+    public bool Enabled = true;
+
+    public CancellationTokenSource? TokenSource;
 }

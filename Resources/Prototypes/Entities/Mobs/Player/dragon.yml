@@ -188,5 +188,6 @@
   components:
   - type: EntityTargetAction
     icon: { sprite : Interface/Actions/devour.rsi, state: icon }
+    priority: -1
     iconOn: { sprite : Interface/Actions/devour.rsi, state: icon-on }
     event: !type:DevourActionEvent

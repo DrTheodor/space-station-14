@@ -27,7 +27,7 @@ public sealed class CuffOnBuckleSystem : EntitySystem
             return;
         }
         var cuffsEntity = Spawn(component.CuffsPrototype, Transform(args.StrapEntity).Coordinates);
-        if (!_cuffable.TryCuffing(args.StrapEntity, uid, cuffsEntity, null, null, false))
+        if (!_cuffable.TryCuffing(args.StrapEntity, uid, cuffsEntity, null, null))
         {
             QueueDel(cuffsEntity);
         }

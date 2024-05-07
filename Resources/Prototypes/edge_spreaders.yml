@@ -9,3 +9,7 @@
 - type: edgeSpreader
   id: Smoke
   updatesPerSecond: 8
+
+- type: edgeSpreader
+  id: Weednode
+  updatesPerSecond: 9

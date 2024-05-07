@@ -12,3 +12,8 @@
   - type: ConditionalSpawner
     prototypes:
     - MobHuman
+
+- type: entity
+  name: Debug checker
+  id: SpawnChecker
+  suffix: DEBUG

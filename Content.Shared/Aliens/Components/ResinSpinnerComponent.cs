@@ -7,7 +7,7 @@ namespace Content.Shared.Aliens.Components;
 /// This is used for...
 /// </summary>
 [RegisterComponent, AutoGenerateComponentState]
-public sealed partial class AlienDroneComponent : Component
+public sealed partial class ResinSpinnerComponent : Component
 {
     [DataField("popupText")]
     [ViewVariables(VVAccess.ReadWrite)]
@@ -23,7 +23,7 @@ public sealed partial class AlienDroneComponent : Component
     public float ProductionLengthWall = 2f;
 
     /// <summary>
-    /// This will subtract (not add, don't get this mixed up) from the current plasma of the mob making acid.
+    /// This will subtract (not add, don't get this mixed up) from the current plasma of the mob making structure.
     /// </summary>
     [DataField("plasmaCostWall")]
     [ViewVariables(VVAccess.ReadWrite)]
@@ -50,7 +50,7 @@ public sealed partial class AlienDroneComponent : Component
     public float ProductionLengthWindow = 2f;
 
     /// <summary>
-    /// This will subtract (not add, don't get this mixed up) from the current plasma of the mob making acid.
+    /// This will subtract (not add, don't get this mixed up) from the current plasma of the mob making structure.
     /// </summary>
     [DataField("plasmaCostWindow")]
     [ViewVariables(VVAccess.ReadWrite)]

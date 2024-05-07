@@ -53,7 +53,7 @@ public sealed class AcidMakerSystem : EntitySystem
     {
 
         if (TryComp<PlasmaVesselComponent>(uid, out var plasmaComp)
-        && plasmaComp.Plasma < comp.PlasmaCost)
+        && plasmaComp.Plasma <= comp.PlasmaCost)
         {
             _popupSystem.PopupClient(Loc.GetString(comp.PopupText), uid, uid);
             return;
@@ -61,7 +61,6 @@ public sealed class AcidMakerSystem : EntitySystem
 
         var doAfter = new DoAfterArgs(EntityManager, uid, comp.ProductionLength, new AcidMakeDoAfterEvent(), uid)
         { // I'm not sure if more things should be put here, but imo ideally it should probably be set in the component/YAML. Not sure if this is currently possible.
-            BreakOnUserMove = false,
             BlockDuplicate = true,
             BreakOnDamage = false,
             CancelDuplicate = true,
@@ -75,13 +74,6 @@ public sealed class AcidMakerSystem : EntitySystem
     {
         if (args.Cancelled || args.Handled || comp.Deleted)
             return;
-
-        if (TryComp<PlasmaVesselComponent>(uid, out var plasmaComp)
-            && plasmaComp.Plasma < comp.PlasmaCost)
-        {
-            _popupSystem.PopupClient(Loc.GetString(comp.PopupText), uid, uid);
-            return;
-        }
 
         _plasmaVesselSystem.ChangePlasmaAmount(uid, -comp.PlasmaCost);
         if (!_netManager.IsClient) // Have to do this because spawning stuff in shared is CBT.

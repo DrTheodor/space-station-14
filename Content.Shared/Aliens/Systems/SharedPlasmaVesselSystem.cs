@@ -1,4 +1,5 @@
 ﻿using Content.Shared.Alert;
+using Content.Shared.Aliens.Components;
 using Content.Shared.FixedPoint;
 using PlasmaVesselComponent = Content.Shared.Aliens.Components.PlasmaVesselComponent;
 
@@ -11,9 +12,21 @@ public sealed class SharedPlasmaVesselSystem : EntitySystem
 {
     /// <inheritdoc/>
     [Dependency] private readonly AlertsSystem _alerts = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
     public override void Initialize()
     {
 
+    }
+
+    public bool ChangePlasmaGain(EntityUid uid, float modifier, PlasmaVesselComponent? component = null)
+    {
+        if (component == null)
+        {
+            return false;
+        }
+        component.PlasmaPerSecond *= modifier;
+
+        return true;
     }
 
     public bool ChangePlasmaAmount(EntityUid uid, FixedPoint2 amount, PlasmaVesselComponent? component = null, bool regenCap = false)
@@ -36,17 +49,30 @@ public sealed class SharedPlasmaVesselSystem : EntitySystem
         base.Update(frameTime);
 
         var query = EntityQueryEnumerator<PlasmaVesselComponent>();
-        while (query.MoveNext(out var uid, out var rev))
+        while (query.MoveNext(out var uid, out var alien))
         {
-            rev.Accumulator += frameTime;
+            alien.Accumulator += frameTime;
 
-            if (rev.Accumulator <= 1)
+            if (alien.Accumulator <= 1)
                 continue;
-            rev.Accumulator -= 1;
+            alien.Accumulator -= 1;
 
-            if (rev.Plasma < rev.PlasmaRegenCap)
+            var weed = false;
+            foreach (var entity in _lookup.GetEntitiesInRange(Transform(uid).Coordinates, 0.1f))
             {
-                ChangePlasmaAmount(uid, rev.PlasmaPerSecond, rev, regenCap: true);
+                if (HasComp<PlasmaGainModifierComponent>(entity))
+                {
+                    alien.PlasmaPerSecond = alien.WeedModifier;
+                    weed = true;
+                }
+            }
+
+            if (!weed)
+                alien.PlasmaPerSecond = alien.PlasmaUnmodified;
+
+            if (alien.Plasma < alien.PlasmaRegenCap)
+            {
+                ChangePlasmaAmount(uid, alien.PlasmaPerSecond, alien, regenCap: true);
             }
         }
     }

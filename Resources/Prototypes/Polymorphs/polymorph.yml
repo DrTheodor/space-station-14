@@ -178,25 +178,62 @@
 
 # Alien evolutions
 
-#Lavras
 - type: polymorph
-  id: AlienLavraGrowStageTwo
+  id: AlienEvolutionGrowStageTwo
   configuration:
     entity: MobAlienLarvaGrowStageTwo
     forced: true
     transferName: true
-    transferHumanoidAppearance: false
-    inventory: None
     revertOnDeath: false
     revertOnCrit: false
+    allowRepeatedMorphs: true
 
 - type: polymorph
-  id: AlienLavraGrowStageThree
+  id: AlienEvolutionGrowStageThree
   configuration:
     entity: MobAlienLarvaGrowStageThree
     forced: true
     transferName: true
-    transferHumanoidAppearance: false
-    inventory: None
     revertOnDeath: false
     revertOnCrit: false
+    allowRepeatedMorphs: true
+
+- type: polymorph
+  id: AlienEvolutionDrone
+  configuration:
+    entity: MobAlienDrone
+    forced: true
+    transferName: false
+    revertOnDeath: false
+    revertOnCrit: false
+    allowRepeatedMorphs: true
+
+- type: polymorph
+  id: AlienEvolutionSentinel
+  configuration:
+    entity: MobAlienSentinel
+    forced: true
+    transferName: false
+    revertOnDeath: false
+    revertOnCrit: false
+    allowRepeatedMorphs: true
+
+- type: polymorph
+  id: AlienEvolutionPraetorian
+  configuration:
+    entity: MobAlienPraetorian
+    forced: true
+    transferName: false
+    revertOnDeath: false
+    revertOnCrit: false
+    allowRepeatedMorphs: true
+
+- type: polymorph
+  id: AlienEvolutionHunter
+  configuration:
+    entity: MobAlienHunter
+    forced: true
+    transferName: false
+    revertOnDeath: false
+    revertOnCrit: false
+    allowRepeatedMorphs: true

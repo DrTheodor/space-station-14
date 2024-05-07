@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Threading;
 using Content.Server.Spawners.Components;
 using Robust.Shared.Random;
@@ -28,7 +29,12 @@ public sealed class SpawnerSystem : EntitySystem
             return;
 
         var number = _random.Next(component.MinimumEntitiesSpawned, component.MaximumEntitiesSpawned);
-        var coordinates = Transform(uid).Coordinates;
+
+        var offset = component.Offset;
+        var xOffset = _random.NextFloat(-offset, offset);
+        var yOffset = _random.NextFloat(-offset, offset);
+        var coordinates = Transform(uid).Coordinates.Offset(new Vector2(xOffset, yOffset));
+        ;
 
         for (var i = 0; i < number; i++)
         {
