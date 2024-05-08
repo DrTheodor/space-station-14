@@ -563,3 +563,73 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 4
     baseSprintSpeed: 8
+
+- type: entity
+  name: mob-alien-queen-name
+  id: MobAlienQueen
+  parent: MobAlienBase
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    offset: 0, 0.4
+    sprite: Mobs/Aliens/Xenos/alienqueen.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: alienq
+    - map: [ "pocket1" ]
+    - map: [ "pocket2" ]
+    - map: [ "enum.HumanoidVisualLayers.Handcuffs" ]
+      color: "#ffffff"
+      sprite: Mobs/Aliens/Xenos/alienqueen.rsi
+      state: aliencuff_q
+      visible: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.6
+        density: 1000
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      640: Critical
+      740: Dead
+  - type: MeleeWeapon
+    altDisarm: true
+    angle: 0
+    soundHit:
+      collection: AlienClaw
+    animation: WeaponArcBite
+    damage:
+      groups:
+        Brute: 30
+      types:
+        Structural: 80
+  - type: DamageStateVisuals
+    rotate: true
+    states:
+      Alive:
+        Base: alienq
+      Critical:
+        Base: alienq_unconscious
+      Dead:
+        Base: alienq_dead
+  - type: PlasmaVessel
+    maxPlasma: 500
+    plasmaPerSecond: 5
+    plasmaModified: 7.5
+  - type: ResinSpinner
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1
+    baseSprintSpeed: 2
+  - type: AcidMaker
+    plasmaCost: 50
+    productionLength: 0
+    entityProduced: AlienAcid
+    action: ActionMakeAcid
+  - type: AlienQueen

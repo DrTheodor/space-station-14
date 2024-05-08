@@ -40,6 +40,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Replays;
 using Robust.Shared.Utility;
 using AlienComponent = Content.Shared.Aliens.Components.AlienComponent;
+using AlienQueenComponent = Content.Shared.Aliens.Components.AlienQueenComponent;
 
 namespace Content.Server.Chat.Systems;
 

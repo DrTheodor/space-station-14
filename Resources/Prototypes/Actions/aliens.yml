@@ -74,6 +74,8 @@
       icon: { sprite : Structures/Windows/resin_membrane.rsi, state: full }
       event: !type:ResinWindowActionEvent
 
+# Evolutions
+
 - type: entity
   id: ActionEvolveDrone
   name: action-evolve-alien-drone
@@ -122,6 +124,8 @@
     icon: { sprite : Mobs/Aliens/Xenos/alien.rsi, state: alienh }
     event: !type:AlienHunterEvolveActionEvent
 
+# Hunter
+
 - type: entity
   id: ActionStalkAlien
   name: action-stalk-alien-hunter
@@ -133,3 +137,15 @@
     useDelay: 0
     icon: { sprite : Interface/Alien/screen_alien.rsi, state: walking }
     event: !type:AlienStalkActionEvent
+
+- type: entity
+  id: ActionAlienEgg
+  name: action-stalk-alien-hunter
+  description: action-evolve-alien-hunter-desc
+  noSpawn: true
+  components:
+  - type: InstantAction
+    priority: 0
+    useDelay: 0
+    icon: { sprite : Mobs/Aliens/Xenos/alien.rsi, state: egg }
+    event: !type:AlienEggActionEvent

@@ -1,0 +1,24 @@
+﻿- type: entity
+  name: Facehugger
+  parent: BaseItem
+  id: Facehugger
+  description: facehugger-desc
+  components:
+  - type: Tag
+    tags:
+    - AlienItem
+  - type: Sprite
+    sprite: Mobs/Aliens/Xenos/alien.rsi
+    state: facehugger
+  - type: Item
+    sprite: Mobs/Aliens/Xenos/alien.rsi
+    state: facehugger
+    size: Small
+  - type: MeleeWeapon
+    wideAnimationRotation: 45
+    attackRate: 1.5
+    damage:
+      types:
+        Blunt: 4.5
+  - type: StaticPrice
+    price: 1000
