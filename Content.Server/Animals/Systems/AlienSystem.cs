@@ -6,6 +6,8 @@ using Content.Shared.Aliens;
 using Content.Shared.Aliens.Components;
 using Content.Shared.Aliens.Systems;
 using Content.Shared.Coordinates.Helpers;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Devour;
 using Content.Shared.Devour.Components;
 using Content.Shared.DoAfter;
@@ -29,7 +31,7 @@ public sealed class AlienSystem : EntitySystem
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly ActionsSystem _actions = default!;
-    [Dependency] private readonly EntityLookupSystem _lookupSystem = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly IMapManager _mapMan = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
@@ -92,7 +94,7 @@ public sealed class AlienSystem : EntitySystem
             return;
         }
 
-        foreach (var entity in _lookupSystem.GetEntitiesInRange(coords, 0.1f))
+        foreach (var entity in _lookup.GetEntitiesInRange(coords, 0.1f))
         {
             if (Prototype(entity) == null)
                 continue;
@@ -103,4 +105,29 @@ public sealed class AlienSystem : EntitySystem
         _plasmaVessel.ChangePlasmaAmount(uid, -component.PlasmaCostNode);
         Spawn(component.WeednodePrototype, _turf.GetTileCenter(tile.Value));
     }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<AlienComponent>();
+
+        while (query.MoveNext(out var uid, out var alien))
+        {
+            var weed = false;
+            var passiveDamageComponent = EnsureComp<PassiveDamageComponent>(uid);
+            foreach (var entity in _lookup.GetEntitiesInRange(Transform(uid).Coordinates, 0.1f))
+            {
+                if (HasComp<PlasmaGainModifierComponent>(entity) && passiveDamageComponent.Damage.Empty)
+                {
+                    passiveDamageComponent.Damage = alien.WeedHeal;
+                    weed = true;
+                }
+            }
+
+            if (!weed)
+                passiveDamageComponent.Damage = new DamageSpecifier();
+        }
+    }
+
 }

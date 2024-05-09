@@ -98,7 +98,18 @@
     - type: BadFood
     - type: NonSpreaderZombie
     - type: PreventSpiller
+    - type: PassiveDamage
+      allowedStates:
+      - Alive
+      - Critical
+      - Dead
     - type: Alien
+      weedHeal:
+        groups:
+          Burn: -5
+          Toxin: -5
+          Airloss: -10
+          Brute: -5
     - type: PlasmaVessel
       maxPlasma: 30
     - type: TimedPolymorph
@@ -307,7 +318,18 @@
       molsPerSecondPerUnitMass: 0.0005
     - type: Speech
       speechVerb: LargeMob
+    - type: PassiveDamage
+      allowedStates:
+      - Alive
+      - Critical
+      - Dead
     - type: Alien
+      weedHeal:
+        groups:
+          Burn: -5
+          Toxin: -5
+          Airloss: -10
+          Brute: -5
     - type: Body
       prototype: Xeno
     - type: Inventory

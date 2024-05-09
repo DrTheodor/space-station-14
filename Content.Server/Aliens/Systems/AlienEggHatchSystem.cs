@@ -41,10 +41,10 @@ public sealed class AlienEggHatchSystem : EntitySystem
         var query = EntityQueryEnumerator<AlienEggHatchComponent>();
         while (query.MoveNext(out var uid, out var alienEgg))
         {
-            foreach (var entity in _lookup.GetEntitiesInRange(uid, alienEgg.ActivationRange))
+            foreach (var entity in _lookup.GetEntitiesInRange(uid, alienEgg.ActivationRange)
+                         .Where(entity => _inventory.HasSlot(entity, "mask")))
             {
-                if(_inventory.HasSlot(entity, "mask"))
-                    _polymorph.PolymorphEntity(uid, alienEgg.PolymorphPrototype);
+                _polymorph.PolymorphEntity(uid, alienEgg.PolymorphPrototype);
             }
         }
     }

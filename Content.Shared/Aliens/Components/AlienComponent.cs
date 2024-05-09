@@ -1,4 +1,6 @@
 ﻿using Content.Shared.Actions;
+using Content.Shared.Damage;
+using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
@@ -39,7 +41,12 @@ public sealed partial class AlienComponent : Component
     [DataField("nodeAction", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string? WeednodeAction = "ActionAlienNode";
 
+
+
     [DataField("nodeActionEntity")] public EntityUid? WeednodeActionEntity;
+
+    [DataField(required: true)]
+    public DamageSpecifier WeedHeal;
 
 }
 
