@@ -124,6 +124,17 @@
     icon: { sprite : Mobs/Aliens/Xenos/alien.rsi, state: alienh }
     event: !type:AlienHunterEvolveActionEvent
 
+- type: entity
+  id: ActionEvolveQueen
+  name: action-evolve-alien-queen
+  description: action-evolve-alien-queen-desc
+  noSpawn: true
+  components:
+  - type: InstantAction
+    priority: 10
+    useDelay: 0
+    icon: { sprite : Mobs/Aliens/Xenos/alienqueen.rsi, state: alienq }
+    event: !type:AlienQueenEvolveActionEvent
 # Hunter
 
 - type: entity
@@ -138,14 +149,29 @@
     icon: { sprite : Interface/Alien/screen_alien.rsi, state: walking }
     event: !type:AlienStalkActionEvent
 
+# Queen
+
 - type: entity
   id: ActionAlienEgg
-  name: action-stalk-alien-hunter
-  description: action-evolve-alien-hunter-desc
+  name: action-stalk-alien
+  description: action-evolve-alien-desc
   noSpawn: true
   components:
   - type: InstantAction
     priority: 0
-    useDelay: 0
+    useDelay: 1
     icon: { sprite : Mobs/Aliens/Xenos/alien.rsi, state: egg }
     event: !type:AlienEggActionEvent
+
+- type: entity
+  id: ActionAlienRoyalLarva
+  name: action-promotion-alien
+  description: action-promotion-alien-desc
+  noSpawn: true
+  components:
+  - type: EntityTargetAction
+    priority: 0
+    useDelay: 1
+    icon: { sprite : Mobs/Aliens/Xenos/alien.rsi, state: alien_medal }
+    iconOn: { sprite : Mobs/Aliens/Xenos/alien.rsi, state: alien_medal_active  }
+    event: !type:RoyalLarvaActionEvent

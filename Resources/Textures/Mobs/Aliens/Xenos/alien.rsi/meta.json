@@ -232,6 +232,9 @@
       "name": "alien_medal"
     },
     {
+        "name": "alien_medal_active"
+    },
+    {
       "name": "alienh",
       "directions": 4
     },

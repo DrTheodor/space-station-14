@@ -31,7 +31,6 @@ public sealed class AlienEggHatchSystem : EntitySystem
 
     private void OnInteract(EntityUid uid, AlienEggHatchComponent component, InteractHandEvent args)
     {
-        Console.WriteLine("Interact. Component found");
         _polymorph.PolymorphEntity(uid, component.PolymorphPrototype);
     }
 

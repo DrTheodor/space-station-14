@@ -21,3 +21,5 @@ public sealed partial class AlienSentinelEvolveActionEvent : InstantActionEvent 
 public sealed partial class AlienPraetorianEvolveActionEvent : InstantActionEvent { }
 
 public sealed partial class AlienHunterEvolveActionEvent : InstantActionEvent { }
+
+public sealed partial class AlienQueenEvolveActionEvent : InstantActionEvent { }

@@ -39,14 +39,6 @@ public sealed partial class AcidMakerComponent : Component
     public EntityUid? ActionEntity;
 
     /// <summary>
-    /// How long will it take to make.
-    /// </summary>
-    [DataField("productionLength")]
-    [ViewVariables(VVAccess.ReadWrite)]
-    [AutoNetworkedField]
-    public float ProductionLength;
-
-    /// <summary>
     /// This will subtract (not add, don't get this mixed up) from the current plasma of the mob making acid.
     /// </summary>
     [DataField("plasmaCost")]

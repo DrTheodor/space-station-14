@@ -18,7 +18,6 @@ public sealed class AcidMakerSystem : EntitySystem
 
     // Systems
     [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedStackSystem _stackSystem = default!;
     [Dependency] private readonly SharedPlasmaVesselSystem _plasmaVesselSystem = default!;
@@ -30,7 +29,6 @@ public sealed class AcidMakerSystem : EntitySystem
         SubscribeLocalEvent<AcidMakerComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<AcidMakerComponent, ComponentShutdown>(OnCompRemove);
         SubscribeLocalEvent<AcidMakerComponent, AcidMakeActionEvent>(OnAcidMakingStart);
-        SubscribeLocalEvent<AcidMakerComponent, AcidMakeDoAfterEvent>(OnAcidMakingDoAfter);
     }
 
     /// <summary>
@@ -53,37 +51,18 @@ public sealed class AcidMakerSystem : EntitySystem
     {
 
         if (TryComp<PlasmaVesselComponent>(uid, out var plasmaComp)
-        && plasmaComp.Plasma <= comp.PlasmaCost)
+        && plasmaComp.Plasma < comp.PlasmaCost)
         {
             _popupSystem.PopupClient(Loc.GetString(comp.PopupText), uid, uid);
             return;
         }
 
-        var doAfter = new DoAfterArgs(EntityManager, uid, comp.ProductionLength, new AcidMakeDoAfterEvent(), uid)
-        { // I'm not sure if more things should be put here, but imo ideally it should probably be set in the component/YAML. Not sure if this is currently possible.
-            BlockDuplicate = true,
-            BreakOnDamage = false,
-            CancelDuplicate = true,
-        };
-
-        _doAfterSystem.TryStartDoAfter(doAfter);
-    }
-
-
-    private void OnAcidMakingDoAfter(EntityUid uid, Components.AcidMakerComponent comp, AcidMakeDoAfterEvent args)
-    {
-        if (args.Cancelled || args.Handled || comp.Deleted)
-            return;
-
         _plasmaVesselSystem.ChangePlasmaAmount(uid, -comp.PlasmaCost);
-        if (!_netManager.IsClient) // Have to do this because spawning stuff in shared is CBT.
-        {
-            var newEntity = Spawn(comp.EntityProduced, Transform(uid).Coordinates);
+        if (_netManager.IsClient) // Have to do this because spawning stuff in shared is CBT.
+            return;
+        var newEntity = Spawn(comp.EntityProduced, Transform(uid).Coordinates);
 
-            _stackSystem.TryMergeToHands(newEntity, uid);
-        }
-
-        args.Repeat = false;
+        _stackSystem.TryMergeToHands(newEntity, uid);
     }
 }
 
@@ -92,8 +71,3 @@ public sealed class AcidMakerSystem : EntitySystem
 /// </summary>
 public sealed partial class AcidMakeActionEvent : InstantActionEvent { }
 
-/// <summary>
-/// Is relayed at the end of the making acid doafter.
-/// </summary>
-[Serializable, NetSerializable]
-public sealed partial class AcidMakeDoAfterEvent : SimpleDoAfterEvent { }

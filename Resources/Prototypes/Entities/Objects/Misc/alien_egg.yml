@@ -20,13 +20,13 @@
         fix1:
           shape:
             !type:PhysShapeAabb
-            bounds: "-0.4,-0.4,0.4,0.29"
-          density: 50
+            bounds: "-0.4,-0.4,0.4,0.4"
+          density: 1000
           mask:
-            - CrateMask #this is so they can go under plastic flaps
+          - ItemMask
           layer:
-            - MachineLayer
-    - type: EntityStorage
+          - SlipLayer
+          hard: false
     - type: PlaceableSurface
       isPlaceable: false # defaults to closed.
     - type: Damageable
@@ -72,13 +72,13 @@
         fix1:
           shape:
             !type:PhysShapeAabb
-            bounds: "-0.4,-0.4,0.4,0.29"
-          density: 50
+            bounds: "-0.4,-0.4,0.4,0.4"
+          density: 1000
           mask:
-            - CrateMask
+          - ItemMask
           layer:
-            - MachineLayer
-    - type: EntityStorage
+          - SlipLayer
+          hard: false
     - type: PlaceableSurface
       isPlaceable: false
     - type: Damageable
@@ -150,7 +150,6 @@
           layer:
           - SlipLayer
           hard: false
-    - type: EntityStorage
     - type: PlaceableSurface
       isPlaceable: false
     - type: Damageable
@@ -173,3 +172,4 @@
     - type: ConditionalSpawner
       prototypes:
       - Facehugger
+

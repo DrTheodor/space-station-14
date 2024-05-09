@@ -257,3 +257,13 @@
     revertOnDeath: false
     revertOnCrit: false
     allowRepeatedMorphs: true
+
+- type: polymorph
+  id: AlienEvolutionQueen
+  configuration:
+    entity: MobAlienQueen
+    forced: true
+    transferName: false
+    revertOnDeath: false
+    revertOnCrit: false
+    allowRepeatedMorphs: true

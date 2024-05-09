@@ -358,16 +358,17 @@
     - type: ResinSpinner
     - type: PlasmaVessel
       plasmaPerSecond: 5
-      plasmaModified: 7.5
+      plasmaModified: 40
+    - type: PraetorianEvolution
 
 - type: entity
   name: mob-alien-sentinel-name
   id: MobAlienSentinel
   parent: MobAlienBase
   components:
+  - type: AlienStalk
   - type: AcidMaker
     action: ActionMakeAcid
-    productionLength: 0
     entityProduced: AlienAcid
   - type: Sprite
     drawdepth: Mobs
@@ -413,7 +414,7 @@
         Base: aliens_dead
   - type: PlasmaVessel
     plasmaPerSecond: 5
-    plasmaModified: 7.5
+    plasmaModified: 40
   - type: RechargeBasicEntityAmmo
     rechargeCooldown: 0.75
   - type: BasicEntityAmmoProvider
@@ -427,7 +428,9 @@
     availableModes:
     - FullAuto
     soundGunshot: /Audio/Weapons/Xeno/alien_spitacid.ogg
-  - type: PraetorianEvolution
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4
+    baseSprintSpeed: 5
 
 - type: entity
   name: mob-alien-praetorian-name
@@ -436,7 +439,6 @@
   components:
   - type: AcidMaker
     action: ActionMakeAcid
-    productionLength: 0
     entityProduced: AlienAcid
     plasmaCost: 100
   - type: Sprite
@@ -491,7 +493,7 @@
         Base: alienp_dead
   - type: PlasmaVessel
     plasmaPerSecond: 5
-    plasmaModified: 7.5
+    plasmaModified: 40
   - type: RechargeBasicEntityAmmo
     rechargeCooldown: 0.75
   - type: BasicEntityAmmoProvider
@@ -505,6 +507,7 @@
     availableModes:
     - FullAuto
     soundGunshot: /Audio/Weapons/Xeno/alien_spitacid.ogg
+  - type: QueenEvolution
 
 - type: entity
   name: mob-alien-hunter-name
@@ -556,10 +559,9 @@
   - type: PlasmaVessel
     maxPlasma: 150
     plasmaPerSecond: 5
-    plasmaModified: 7.5
+    plasmaModified: 40
   - type: Devourer
     devourTime: 2
-  - type: AlienStalk
   - type: MovementSpeedModifier
     baseWalkSpeed: 4
     baseSprintSpeed: 8
@@ -571,7 +573,7 @@
   components:
   - type: Sprite
     drawdepth: Mobs
-    offset: 0, 0.4
+    offset: 0, 0.5
     sprite: Mobs/Aliens/Xenos/alienqueen.rsi
     layers:
     - map: [ "enum.DamageStateVisualLayers.Base" ]
@@ -609,7 +611,7 @@
       groups:
         Brute: 30
       types:
-        Structural: 80
+        Structural: 300
   - type: DamageStateVisuals
     rotate: true
     states:
@@ -622,14 +624,14 @@
   - type: PlasmaVessel
     maxPlasma: 500
     plasmaPerSecond: 5
-    plasmaModified: 7.5
+    plasmaModified: 40
   - type: ResinSpinner
   - type: MovementSpeedModifier
     baseWalkSpeed: 1
     baseSprintSpeed: 2
   - type: AcidMaker
     plasmaCost: 50
-    productionLength: 0
     entityProduced: AlienAcid
     action: ActionMakeAcid
   - type: AlienQueen
+    action: ActionAlienRoyalLarva

@@ -1,9 +1,11 @@
 ﻿using Content.Server.Actions;
+using Content.Server.Aliens.Components;
 using Content.Server.Animals.Components;
 using Content.Server.Popups;
 using Content.Shared.Aliens.Components;
 using Content.Shared.Aliens.Systems;
 using Content.Shared.Coordinates.Helpers;
+using Content.Shared.Hands.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Content.Shared.Tag;
@@ -19,7 +21,7 @@ namespace Content.Server.Aliens.Systems;
 /// </summary>
 public sealed class AlienQueenSystem : EntitySystem
 {
-    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly AlienEvolutionSystem _evolution = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly ActionsSystem _actions = default!;
     [Dependency] private readonly EntityLookupSystem _lookupSystem = default!;
@@ -34,6 +36,7 @@ public sealed class AlienQueenSystem : EntitySystem
 
         SubscribeLocalEvent<AlienQueenComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<AlienQueenComponent, AlienEggActionEvent>(OnEgg);
+        SubscribeLocalEvent<AlienQueenComponent, RoyalLarvaActionEvent>(OnRoyalLarva);
     }
 
     private void OnMapInit(EntityUid uid, AlienQueenComponent component, MapInitEvent args)
@@ -83,5 +86,28 @@ public sealed class AlienQueenSystem : EntitySystem
 
         _plasmaVessel.ChangePlasmaAmount(uid, -component.PlasmaCostEgg);
         Spawn(component.EggPrototype, _turf.GetTileCenter(tile.Value));
+    }
+
+    public void OnRoyalLarva(EntityUid uid, AlienQueenComponent component, RoyalLarvaActionEvent args)
+    {
+        if (TryComp<PlasmaVesselComponent>(uid, out var plasmaComp)
+            && plasmaComp.Plasma < component.PlasmaCostRoyalLarva)
+        {
+            _popup.PopupEntity(Loc.GetString("alien-action-fail-plasma"), uid, uid);
+            return;
+        }
+
+        if (!HasComp<AlienComponent>(args.Target) ||
+            !HasComp<HandsComponent>(args.Target) ||
+            HasComp<QueenEvolutionComponent>(args.Target) ||
+            HasComp<AlienQueenComponent>(args.Target))
+        {
+            _popup.PopupEntity(Loc.GetString("alien-evolution-fail"), uid, uid);
+            return;
+        }
+
+        _plasmaVessel.ChangePlasmaAmount(uid, -component.PlasmaCostRoyalLarva);
+        _evolution.Evolve(args.Target, component.PraetorianPolymorphPrototype);
+        _actions.RemoveAction(component.ActionEntity);
     }
 }
