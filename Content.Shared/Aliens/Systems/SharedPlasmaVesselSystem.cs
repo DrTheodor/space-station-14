@@ -1,6 +1,8 @@
 ﻿using Content.Shared.Alert;
 using Content.Shared.Aliens.Components;
+using Content.Shared.Chat;
 using Content.Shared.FixedPoint;
+using Content.Shared.Popups;
 using PlasmaVesselComponent = Content.Shared.Aliens.Components.PlasmaVesselComponent;
 
 namespace Content.Shared.Aliens.Systems;
@@ -10,9 +12,8 @@ namespace Content.Shared.Aliens.Systems;
 /// </summary>
 public sealed class SharedPlasmaVesselSystem : EntitySystem
 {
-    /// <inheritdoc/>
-    [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
     public override void Initialize()
     {
 
@@ -39,7 +40,16 @@ public sealed class SharedPlasmaVesselSystem : EntitySystem
         if (regenCap)
             FixedPoint2.Min(component.Plasma, component.PlasmaRegenCap);
 
-        // _alerts.ShowAlert(uid, AlertType.Essence, (short) Math.Clamp(Math.Round(component.Plasma.Float() / 10f), 0, 16));
+        var stalk = CompOrNull<AlienStalkComponent>(uid);
+        if (stalk != null && stalk.IsActive)
+        {
+            return true;
+        }
+        if(amount != component.PlasmaUnmodified && amount != component.WeedModifier)
+        {
+            _popup.PopupEntity(Loc.GetString("alien-left-plasma-part1") + component.Plasma + Loc.GetString("alien-left-plama-part2"),
+                uid);
+        }
 
         return true;
     }

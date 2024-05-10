@@ -50,8 +50,12 @@ public sealed class AreaSpawnerSystem : EntitySystem
     private void OnTimerFired(EntityUid uid, AreaSpawnerComponent component)
     {
         var validTiles = GetValidTilesInRadius(uid, component, component.SpawnRadius);
-        if (validTiles.Count == 0 && component.SpawnRadius <= component.Radius)
+        while (validTiles.Count == 0 && component.SpawnRadius <= component.Radius)
+        {
             component.SpawnRadius++;
+            validTiles = GetValidTilesInRadius(uid, component, component.SpawnRadius);
+        }
+
         validTiles = GetValidTilesInRadius(uid, component, component.SpawnRadius);
         RandomlySpawnEntity(uid, component, validTiles);
     }

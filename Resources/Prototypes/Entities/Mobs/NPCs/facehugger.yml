@@ -1,5 +1,5 @@
 ﻿- type: entity
-  name: Facehugger
+  name: facehugger-name
   parent: BaseItem
   id: Facehugger
   description: facehugger-desc
@@ -56,21 +56,29 @@
     - Mask
   - type: BreathMask
   - type: Facehugger
-    range: 1.5
+    range: 1
   - type: Blindfold
 
 - type: entity
   name: Facehugger
-  parent: Facehugger
+  parent: BaseItem
   id: FacehuggerInactive
   description: facehugger-desc
+  suffix: Inactive
   components:
     - type: Sprite
       sprite: Mobs/Aliens/Xenos/alien.rsi
-      state: facehugger_inactive
+      state: facehugger_impregnated
     - type: Item
       sprite: Mobs/Aliens/Xenos/alien.rsi
       state: facehugger_impregnated
       size: Small
-    - type: Facehugger
-      active: false
+    - type: StaticPrice
+      price: 100
+    - type: Clothing
+      sprite: Clothing/Mask/facehugger.rsi
+      slots:
+      - Mask
+    - type: BreathMask
+    - type: Blindfold
+

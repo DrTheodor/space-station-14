@@ -47,7 +47,7 @@
     - type: StaticPrice
       price: 1000
     - type: TimedPolymorph
-      polymorphTime: 2
+      polymorphTime: 240
       polymorphPrototype: AlienEggGrowth
 
 - type: entity

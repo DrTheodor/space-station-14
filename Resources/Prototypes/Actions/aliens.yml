@@ -140,7 +140,7 @@
 - type: entity
   id: ActionStalkAlien
   name: action-stalk-alien-hunter
-  description: action-evolve-alien-hunter-desc
+  description: action-stalk-alien-hunter-desc
   noSpawn: true
   components:
   - type: InstantAction
@@ -153,8 +153,8 @@
 
 - type: entity
   id: ActionAlienEgg
-  name: action-stalk-alien
-  description: action-evolve-alien-desc
+  name: action-egg-alien
+  description: action-egg-alien-desc
   noSpawn: true
   components:
   - type: InstantAction
@@ -175,3 +175,28 @@
     icon: { sprite : Mobs/Aliens/Xenos/alien.rsi, state: alien_medal }
     iconOn: { sprite : Mobs/Aliens/Xenos/alien.rsi, state: alien_medal_active  }
     event: !type:RoyalLarvaActionEvent
+
+- type: entity
+  id: ActionTailLash
+  name: action-tail-lash
+  description: action-tail-lash-desc
+  noSpawn: true
+  components:
+  - type: InstantAction
+    priority: 0
+    cooldown: 11
+    icon: { sprite : Mobs/Aliens/Xenos/alien.rsi, state: tail_lash }
+    event: !type:TailLashActionEvent
+
+- type: entity
+  id: ActionAlienTransferPlasma
+  name: action-transfer-plasma-alien
+  description: action-transfer-plasma-alien-desc
+  noSpawn: true
+  components:
+  - type: EntityTargetAction
+    priority: 0
+    useDelay: 1
+    icon: { sprite : Objects/Materials/Sheets/other.rsi, state: plasma }
+    iconOn: { sprite : Objects/Materials/Sheets/other.rsi, state: plasma_2 }
+    event: !type:TransferPlasmaActionEvent

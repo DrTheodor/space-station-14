@@ -1,4 +1,5 @@
-﻿using Robust.Shared.Prototypes;
+﻿using Content.Shared.Polymorph;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Aliens.Components;
 
@@ -12,9 +13,5 @@ public sealed partial class FacehuggerComponent : Component
     public float Range = 3f;
 
     [DataField]
-    public bool Active = true;
-
-    [DataField]
-    [ViewVariables(VVAccess.ReadWrite)]
-    public EntProtoId InactiveEntity = "FacehuggerInactive";
+    public ProtoId<PolymorphPrototype> FacehuggerPolymorphPrototype = "FacehuggerToInactive";
 }

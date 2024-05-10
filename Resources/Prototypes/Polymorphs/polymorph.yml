@@ -267,3 +267,15 @@
     revertOnDeath: false
     revertOnCrit: false
     allowRepeatedMorphs: true
+
+# Deactivating facehugger
+
+- type: polymorph
+  id: FacehuggerToInactive
+  configuration:
+    entity: FacehuggerInactive
+    forced: true
+    transferName: false
+    revertOnDeath: false
+    revertOnCrit: false
+    allowRepeatedMorphs: true

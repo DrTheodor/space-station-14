@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using Content.Shared.Aliens.Components;
+using Content.Shared.Ghost;
+using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
@@ -17,18 +19,7 @@ public sealed class SharedFacehuggerSystem : EntitySystem
     [Dependency] private readonly InventorySystem _inventory = default!;
     public override void Initialize()
     {
-        SubscribeLocalEvent<FacehuggerComponent, GotEquippedEvent>(OnEquipped);
-    }
 
-    private void OnEquipped(EntityUid uid, FacehuggerComponent component, GotEquippedEvent args)
-    {
-        if (component.Active)
-        {
-            var inactive = Spawn(component.InactiveEntity);
-            _inventory.TryEquip(args.Equipee, inactive, "mask");
-
-            QueueDel(uid);
-        }
     }
 
     public override void Update(float frameTime)
@@ -37,14 +28,47 @@ public sealed class SharedFacehuggerSystem : EntitySystem
 
         var query = EntityQueryEnumerator<FacehuggerComponent>();
 
+        var validEntities = new Dictionary<EntityUid, EntityUid>();
+
         while (query.MoveNext(out var uid, out var alien))
         {
             foreach (var entity in _lookup.GetEntitiesInRange(uid, alien.Range)
                          .Where(entity => _inventory.HasSlot(entity, "mask")))
             {
-                if(_inventory.CanAccess(uid, entity, uid) && EnsureComp<MobStateComponent>(uid).CurrentState == MobState.Alive)
-                    _inventory.TryEquip(entity, uid, "mask");
+                if (!_inventory.CanAccess(uid, entity, uid) ||
+                    EnsureComp<MobStateComponent>(uid).CurrentState != MobState.Alive)
+                    continue;
+                if(Prototype(entity) != null && Prototype(entity)!.ID == "AdminObserver")
+                    continue;
+                if(!HasComp<MobStateComponent>(entity) || Comp<MobStateComponent>(entity).CurrentState == MobState.Dead)
+                    continue;
+                if(HasComp<AlienInfectedComponent>(entity))
+                    continue;
+                validEntities.TryAdd(uid, entity);
             }
+        }
+
+        var invalidEntities = new Dictionary<EntityUid, EntityUid>();
+
+        foreach (var entity in validEntities)
+        {
+
+            var queryHelmets = EntityQueryEnumerator<IdentityBlockerComponent>();
+            while (queryHelmets.MoveNext(out var helmet, out _))
+            {
+                if (!_inventory.GetHandOrInventoryEntities(entity.Value, SlotFlags.HEAD).Contains(helmet))
+                    continue;
+                validEntities.Remove(entity.Key);
+                invalidEntities.TryAdd(entity.Key, entity.Value);
+                break;
+            }
+
+            if (invalidEntities.ContainsKey(entity.Key))
+                continue;
+            _inventory.TryUnequip(entity.Value, "mask");
+            _inventory.TryEquip(entity.Value, entity.Key, "mask");
+
+
         }
     }
 }

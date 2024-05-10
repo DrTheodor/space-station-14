@@ -13,5 +13,5 @@ public sealed partial class AlienEggHatchComponent : Component
     public ProtoId<PolymorphPrototype> PolymorphPrototype;
 
     [DataField]
-    public float ActivationRange = 3f;
+    public float ActivationRange = 1f;
 }

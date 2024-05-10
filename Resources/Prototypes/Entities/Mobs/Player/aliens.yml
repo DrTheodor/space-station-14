@@ -14,8 +14,14 @@
       description: ghost-role-information-alien-larva-description
     - type: GhostTakeoverAvailable
     - type: Speech
-      speechSounds: Vox
+      speechSounds: Alien
       speechVerb: SmallMob
+    - type: Vocal
+      sounds:
+        Male: UnisexReptilian
+        Female: UnisexReptilian
+        Unsexed: UnisexReptilian
+    - type: LizardAccent
     - type: Sprite
       drawdepth: SmallMobs
       sprite: Mobs/Aliens/Xenos/alien.rsi
@@ -75,11 +81,6 @@
         - Trash
         - VimPilot
         - Meat
-    - type: Vocal
-      sounds:
-        Male: Mouse
-        Female: Mouse
-        Unsexed: Mouse
       wilhelmProbability: 0.001
     - type: CombatMode
     - type: MeleeWeapon
@@ -114,7 +115,7 @@
       maxPlasma: 30
     - type: TimedPolymorph
       polymorphPrototype: AlienEvolutionGrowStageTwo
-      polymorphTime: 5
+      polymorphTime: 50
 
 
 - type: entity
@@ -144,7 +145,7 @@
           Base: larva1_dead
     - type: TimedPolymorph
       polymorphPrototype: AlienEvolutionGrowStageThree
-      polymorphTime: 5
+      polymorphTime: 50
 
 - type: entity
   parent: MobAlienLarva
@@ -174,7 +175,7 @@
     - type: TimedPolymorph
       enabled: false
     - type: AlienEvolution
-      evolutionCooldown: 5
+      evolutionCooldown: 50
 
 - type: entity
   name: mob-alien-drone-name
@@ -183,6 +184,7 @@
   parent: SimpleSpaceMobBase
   description: They mostly come at night. Mostly.
   components:
+    - type: PlasmaTransfer
     - type: Insulated
     - type: CombatMode
     - type: InputMover
@@ -316,8 +318,6 @@
     - type: NoSlip
     - type: Perishable #Ummmm the acid kills a lot of the bacteria or something
       molsPerSecondPerUnitMass: 0.0005
-    - type: Speech
-      speechVerb: LargeMob
     - type: PassiveDamage
       allowedStates:
       - Alive
@@ -367,6 +367,15 @@
       hungerAdded: 5.0
     - type: PlasmaVessel
     - type: Alerts
+    - type: Speech
+      speechSounds: Alien
+      speechVerb: SmallMob
+    - type: Vocal
+      sounds:
+        Male: UnisexReptilian
+        Female: UnisexReptilian
+        Unsexed: UnisexReptilian
+    - type: LizardAccent
 
 - type: entity
   name: mob-alien-drone-name
@@ -465,7 +474,6 @@
     plasmaCost: 100
   - type: Sprite
     drawdepth: Mobs
-    offset: 0, 0.6
     sprite: Mobs/Aliens/Xenos/alienqueen.rsi
     layers:
     - map: [ "enum.DamageStateVisualLayers.Base" ]
@@ -530,6 +538,8 @@
     - FullAuto
     soundGunshot: /Audio/Weapons/Xeno/alien_spitacid.ogg
   - type: QueenEvolution
+  - type: ResinSpinner
+  - type: TailLash
 
 - type: entity
   name: mob-alien-hunter-name
@@ -595,7 +605,6 @@
   components:
   - type: Sprite
     drawdepth: Mobs
-    offset: 0, 0.5
     sprite: Mobs/Aliens/Xenos/alienqueen.rsi
     layers:
     - map: [ "enum.DamageStateVisualLayers.Base" ]
@@ -657,3 +666,7 @@
     action: ActionMakeAcid
   - type: AlienQueen
     action: ActionAlienRoyalLarva
+  - type: Speech
+    speechSounds: Alien
+    speechVerb: LargeMob
+  - type: TailLash
