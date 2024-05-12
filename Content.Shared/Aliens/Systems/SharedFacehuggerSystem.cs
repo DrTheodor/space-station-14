@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Content.Shared.Aliens.Components;
 using Content.Shared.Ghost;
+using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
@@ -16,6 +18,7 @@ public sealed class SharedFacehuggerSystem : EntitySystem
 {
     /// <inheritdoc/>
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     public override void Initialize()
     {
@@ -44,6 +47,8 @@ public sealed class SharedFacehuggerSystem : EntitySystem
                     continue;
                 if(HasComp<AlienInfectedComponent>(entity))
                     continue;
+                if(!alien.Active)
+                    continue;
                 validEntities.TryAdd(uid, entity);
             }
         }
@@ -56,8 +61,14 @@ public sealed class SharedFacehuggerSystem : EntitySystem
             var queryHelmets = EntityQueryEnumerator<IdentityBlockerComponent>();
             while (queryHelmets.MoveNext(out var helmet, out _))
             {
+                var hands = CompOrNull<HandsComponent>(entity.Value);
                 if (!_inventory.GetHandOrInventoryEntities(entity.Value, SlotFlags.HEAD).Contains(helmet))
                     continue;
+                if (_inventory.GetHandOrInventoryEntities(entity.Value, SlotFlags.HEAD).Contains(helmet) &&
+                    hands != null &&
+                    _hands.IsHolding(entity.Value, helmet, out _, hands))
+                    continue;
+
                 validEntities.Remove(entity.Key);
                 invalidEntities.TryAdd(entity.Key, entity.Value);
                 break;

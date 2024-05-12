@@ -26,6 +26,7 @@ public sealed partial class AreaSpawnerComponent : Component
     [DataField]
     public int IntervalSeconds = 1;
 
+    [ViewVariables]
     public int SpawnRadius;
 
     public CancellationTokenSource? TokenSource;

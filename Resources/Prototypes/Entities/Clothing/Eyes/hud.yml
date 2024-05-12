@@ -39,6 +39,7 @@
   - type: ShowHealthIcons
     damageContainers:
     - Biological
+  - type: ShowInfectedIcons
   - type: Tag
     tags:
     - HudMedical

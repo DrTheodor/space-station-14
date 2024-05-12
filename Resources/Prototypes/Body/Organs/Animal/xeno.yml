@@ -79,3 +79,16 @@
             Quantity: 10
           - ReagentId: Blood
             Quantity: 20
+
+
+- type: entity
+  id: AlienLarvaOrgan
+  name: "alien larva"
+  noSpawn: true
+  parent: BaseAnimalOrgan
+  components:
+  - type: Sprite
+    sprite: Mobs/Aliens/Xenos/alien.rsi
+    state: larva0
+  - type: Organ
+  - type: LarvaOrgan

@@ -127,7 +127,26 @@ public sealed class AreaSpawnerSystem : EntitySystem
                 return false;
         }
 
-        return true;
+        var offsets = new List<Vector2>();
+
+        offsets.Add(new Vector2(0, 1));
+        offsets.Add(new Vector2(0, -1));
+        offsets.Add(new Vector2(1, 0));
+        offsets.Add(new Vector2(-1, 0));
+
+        foreach (var check in offsets)
+        {
+            foreach (var entity in _lookup.GetEntitiesInRange(coords.Offset(check), 0.1f))
+            {
+                if (Prototype(entity) == null)
+                    continue;
+                if (Prototype(entity)!.ID == entityPrototype || Prototype(entity) == Prototype(uid))
+                    return true;
+            }
+        }
+
+
+        return false;
     }
 
     private void OnTimedSpawnerShutdown(EntityUid uid, AreaSpawnerComponent component, ComponentShutdown args)

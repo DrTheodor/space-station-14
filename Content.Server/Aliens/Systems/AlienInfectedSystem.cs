@@ -1,10 +1,23 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using Content.Server.Aliens.Components;
+using Content.Server.Body.Systems;
+using Content.Server.Ghost.Roles;
+using Content.Server.Ghost.Roles.Components;
+using Content.Server.Mind;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Events;
+using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Ghost.Roles;
 using Content.Shared.Gibbing.Components;
 using Content.Shared.Gibbing.Events;
 using Content.Shared.Gibbing.Systems;
 using Content.Shared.Mobs;
+using Content.Shared.Random;
+using FastAccessors;
+using Robust.Shared.Random;
+using Robust.Shared.Timing;
 using AlienInfectedComponent = Content.Shared.Aliens.Components.AlienInfectedComponent;
 
 namespace Content.Server.Aliens.Systems;
@@ -15,39 +28,62 @@ namespace Content.Server.Aliens.Systems;
 public sealed class AlienInfectedSystem : EntitySystem
 {
     /// <inheritdoc/>
-    [Dependency] private readonly GibbingSystem _gibbing = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly BodySystem _body = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly GhostRoleSystem _ghostRole = default!;
+    [Dependency] private readonly MindSystem _mind = default!;
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<AlienInfectedComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<AlienInfectedComponent, ComponentShutdown>(OnComponentShutdown);
-        SubscribeLocalEvent<AlienInfectedComponent, MobStateChangedEvent>(OnMobState);
+        SubscribeLocalEvent<AlienInfectedComponent, TakeGhostRoleEvent>(OnGhostRoleTaken);
     }
 
     private void OnComponentInit(EntityUid uid, AlienInfectedComponent component, ComponentInit args)
     {
-        component.TokenSource?.Cancel();
-        component.TokenSource = new CancellationTokenSource();
-        uid.SpawnRepeatingTimer(TimeSpan.FromSeconds(component.GrowTime), () => OnTimerFired(uid, component), component.TokenSource.Token);
+        component.NextGrowRoll = _timing.CurTime + TimeSpan.FromSeconds(component.GrowTime);
     }
 
-    private void OnTimerFired(EntityUid uid, AlienInfectedComponent component)
+    private void OnGhostRoleTaken(EntityUid uid, AlienInfectedComponent component, TakeGhostRoleEvent args)
     {
-        Spawn(component.EntityProduced, Transform(uid).Coordinates);
-        var damage = new DamageSpecifier();
-        damage.DamageDict.Add("Blunt", 400);
-        _damageable.TryChangeDamage(uid, damage);
-    }
-
-    private void OnMobState(EntityUid uid, AlienInfectedComponent component, MobStateChangedEvent args)
-    {
-        if (args.NewMobState == MobState.Dead)
-            RemComp<AlienInfectedComponent>(uid);
+        if (args.Player.AttachedEntity == null)
+            return;
+        var entity = args.Player.AttachedEntity.Value;
+        if (entity == component.SpawnedLarva)
+        {
+            Transform(entity).Coordinates = Transform(uid).Coordinates;
+            _body.GibBody(uid, true);
+        }
     }
 
     private void OnComponentShutdown(EntityUid uid, AlienInfectedComponent component, ComponentShutdown args)
     {
-        component.TokenSource?.Cancel();
+
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<AlienInfectedComponent>();
+        while (query.MoveNext(out var uid, out var infected))
+        {
+            if (_timing.CurTime < infected.NextGrowRoll)
+                continue;
+
+            if (infected.GrowthStage == 5)
+            {
+                infected.SpawnedLarva = Spawn(infected.Prototype, Transform(uid).Coordinates);
+                _body.GibBody(uid, true);
+            }
+
+            if (_random.Prob(infected.GrowProb))
+            {
+                infected.GrowthStage++;
+            }
+            infected.NextGrowRoll = _timing.CurTime + TimeSpan.FromSeconds(infected.GrowTime);
+        }
     }
 }

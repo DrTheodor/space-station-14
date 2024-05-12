@@ -4,6 +4,7 @@
   id: MobAlienLarva
   description: alien-larva-desc
   components:
+    - type: ShowInfectedIcons
     - type: Body
       prototype: Xeno
     - type: GhostRole
@@ -184,6 +185,7 @@
   parent: SimpleSpaceMobBase
   description: They mostly come at night. Mostly.
   components:
+    - type: ShowInfectedIcons
     - type: PlasmaTransfer
     - type: Insulated
     - type: CombatMode

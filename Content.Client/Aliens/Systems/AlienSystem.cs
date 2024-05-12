@@ -11,7 +11,6 @@ namespace Content.Client.Aliens.Systems;
 public sealed class AlienSystem : EntitySystem
 {
     [Dependency] private readonly ContentEyeSystem _contentEye = default!;
-    [Dependency] private readonly SharedActionsSystem _action = default!;
     /// <inheritdoc/>
     public override void Initialize()
     {
