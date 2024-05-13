@@ -38,24 +38,11 @@ public sealed class AlienInfectedSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<AlienInfectedComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<AlienInfectedComponent, ComponentShutdown>(OnComponentShutdown);
-        SubscribeLocalEvent<AlienInfectedComponent, TakeGhostRoleEvent>(OnGhostRoleTaken);
     }
 
     private void OnComponentInit(EntityUid uid, AlienInfectedComponent component, ComponentInit args)
     {
         component.NextGrowRoll = _timing.CurTime + TimeSpan.FromSeconds(component.GrowTime);
-    }
-
-    private void OnGhostRoleTaken(EntityUid uid, AlienInfectedComponent component, TakeGhostRoleEvent args)
-    {
-        if (args.Player.AttachedEntity == null)
-            return;
-        var entity = args.Player.AttachedEntity.Value;
-        if (entity == component.SpawnedLarva)
-        {
-            Transform(entity).Coordinates = Transform(uid).Coordinates;
-            _body.GibBody(uid, true);
-        }
     }
 
     private void OnComponentShutdown(EntityUid uid, AlienInfectedComponent component, ComponentShutdown args)
@@ -75,7 +62,7 @@ public sealed class AlienInfectedSystem : EntitySystem
 
             if (infected.GrowthStage == 5)
             {
-                infected.SpawnedLarva = Spawn(infected.Prototype, Transform(uid).Coordinates);
+                Spawn(infected.Prototype, Transform(uid).Coordinates);
                 _body.GibBody(uid, true);
             }
 

@@ -68,8 +68,19 @@ public sealed class AreaSpawnerSystem : EntitySystem
     /// <param name="locations">List of possible location offsets from the core</param>
     public void RandomlySpawnEntity(EntityUid uid, AreaSpawnerComponent component, List<Vector2> locations)
     {
-        var location = locations.ElementAt(_random.Next(0, locations.Count));
-        Spawn(component.SpawnPrototype, Transform(uid).Coordinates.Offset(location));
+        if (component.SpawnToAllValidTiles)
+        {
+            foreach (var location in locations)
+            {
+                Spawn(component.SpawnPrototype, Transform(uid).Coordinates.Offset(location));
+            }
+        }
+        else
+        {
+            var location = locations.ElementAt(_random.Next(0, locations.Count));
+            Spawn(component.SpawnPrototype, Transform(uid).Coordinates.Offset(location));
+        }
+
     }
 
     /// <summary>

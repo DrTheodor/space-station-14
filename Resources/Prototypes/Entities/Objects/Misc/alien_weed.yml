@@ -58,7 +58,7 @@
   - type: AreaSpawner
     radius: 9
     spawnPrototype: AlienWeed
-    intervalSeconds: 5
+    intervalSeconds: 1
   - type: Tag
     tags: [ Carpet ]
   - type: Physics

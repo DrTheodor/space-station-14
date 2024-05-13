@@ -24,7 +24,11 @@ public sealed partial class AreaSpawnerComponent : Component
     /// Length of the interval between spawn attempts.
     /// </summary>
     [DataField]
-    public int IntervalSeconds = 1;
+    public int IntervalSeconds = 20;
+
+    // This will spawn entities to every tile in spawn radius
+    [DataField]
+    public bool SpawnToAllValidTiles = true;
 
     [ViewVariables]
     public int SpawnRadius;
