@@ -18,7 +18,13 @@ public sealed partial class AlienInfectedComponent : Component
     public float GrowTime = 2f;
 
     [DataField]
-    public EntProtoId Prototype = "SpawnPointGhostAlienLarvaFirstStage";
+    public EntProtoId Prototype = "MobAlienLarva";
+
+    [DataField]
+    public EntProtoId OrganProtoId = "AlienLarvaOrgan";
+
+    [DataField]
+    public EntProtoId PartProtoId = "AlienLarvaPart";
 
     public readonly HashSet<ProtoId<StatusIconPrototype>> InfectedIcons =
     [

@@ -92,3 +92,20 @@
     state: larva0
   - type: Organ
   - type: LarvaOrgan
+
+- type: entity
+  id: AlienLarvaPart
+  name: "alien larva"
+  parent: PartHuman
+  components:
+  - type: Sprite
+    sprite: Mobs/Aliens/Xenos/alien.rsi
+    state: larva0
+  - type: Unremoveable
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: Fat
+        Quantity: 10
+      - ReagentId: Blood
+        Quantity: 20

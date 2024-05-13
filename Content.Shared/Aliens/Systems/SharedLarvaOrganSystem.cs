@@ -21,7 +21,6 @@ public sealed class SharedLarvaOrganSystem : EntitySystem
     private void OnLarvaRemoved(EntityUid uid, LarvaOrganComponent component, OrganRemovedFromBodyEvent args)
     {
         RemComp<AlienInfectedComponent>(args.OldBody);
-        Spawn(component.EntityProduced, Transform(uid).Coordinates);
-        QueueDel(uid);
+        Spawn(component.EntityProduced, Transform(args.OldBody).Coordinates);
     }
 }

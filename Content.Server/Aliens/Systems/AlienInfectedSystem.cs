@@ -42,6 +42,9 @@ public sealed class AlienInfectedSystem : EntitySystem
 
     private void OnComponentInit(EntityUid uid, AlienInfectedComponent component, ComponentInit args)
     {
+        // var torsoPart = Comp<BodyComponent>(uid).RootContainer.ContainedEntities[0];
+        // _body.TryCreateOrganSlot(torsoPart, "alienLarvaOrgan", out _);
+        // _body.InsertOrgan(torsoPart, Spawn(component.OrganProtoId, Transform(uid).Coordinates), "alienLarvaOrgan");
         component.NextGrowRoll = _timing.CurTime + TimeSpan.FromSeconds(component.GrowTime);
     }
 
